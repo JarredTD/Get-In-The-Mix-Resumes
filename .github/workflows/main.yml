@@ -10,17 +10,16 @@ jobs:
       image: python:3.12
 
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Install dependencies
-      run: pip3 install -r app/requirements.txt
-      
-    - name: Formatter
-      run: black --config pyproject.toml --check
+      - uses: actions/checkout@v2
 
-    - name: Linter
-      run: pylint --rcfile pyproject.toml app tests
-      
-    - name: Test
-      run: pytest
-    
+      - name: Install dependencies
+        run: pip3 install -r app/requirements.txt
+
+      - name: Formatter
+        run: black --config pyproject.toml app tests --check
+
+      - name: Linter
+        run: pylint --rcfile pyproject.toml app tests
+
+      - name: Test
+        run: pytest
