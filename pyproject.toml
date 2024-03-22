@@ -32,3 +32,7 @@ disable = []
 max-line-length = 88
 ignore-paths = [".venv/*"]
 source = ["app", "tests"]
+
+[tool.pyright]
+venvPath = "."
+venv = "venv"
