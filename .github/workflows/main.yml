@@ -1,0 +1,26 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.12
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: pip3 install -r app/requirements.txt
+      
+    - name: Formatter
+      run: black --config pyproject.toml --check
+
+    - name: Linter
+      run: pylint --rcfile pyproject.toml app tests
+      
+    - name: Test
+      run: pytest
+    
