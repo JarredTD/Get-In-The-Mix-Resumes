@@ -15,4 +15,5 @@ fi
 
 docker run -d --name gitmr-app -p 8080:8080 gitmr-app
 
-echo "gitmr-app container is up and running on 127.0.0.1:8080"
+echo "gitmr-app container is up and running on http://localhost:8080"
+open http://localhost:8080
