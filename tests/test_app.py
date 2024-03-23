@@ -1,10 +1,10 @@
 """Unit tests for the Flask application defined in app.py."""
 
-import unittest
-from app.app import app
-
 # pylint: disable=import-error
 # pylint: disable=no-name-in-module
+
+import unittest
+from app.app import app
 
 
 class FlaskTestCase(unittest.TestCase):
