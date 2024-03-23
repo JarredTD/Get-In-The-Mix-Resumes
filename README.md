@@ -1,5 +1,7 @@
 # Get-In-The-Mix-Resumes
 
+![build](https://github.com/JarredTD/Get-In-The-Mix-Resumes/actions/workflows/main.yml>/badge.svg)
+
 ## Introduction
 
 Get-In-The-Mix-Resumes is a tool designed to simplify and enhance the process of creating and managing resumes. It provides an intuitive way to compile professional resumes.
