@@ -3,3 +3,4 @@
 python3 -m venv venv
 source ./venv/bin/activate
 pip3 install -r app/requirements.txt
+pre-commit install
