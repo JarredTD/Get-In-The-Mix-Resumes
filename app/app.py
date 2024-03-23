@@ -1,4 +1,4 @@
-"""Entry point for the flask application"""
+"""Entry point for the Flask application."""
 
 from flask import Flask, render_template
 
@@ -7,17 +7,32 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    """Routes '/' to 'index.html'"""
+    """
+    Serve the main index page.
+
+    :return: The rendered template for the main index page.
+    :rtype: str
+    """
     return render_template("index.html")
 
 
 @app.route("/about-us")
 def about_us():
-    """Routes '/about-us' to 'about_us.html'"""
+    """
+    Serve the 'About Us' page.
+
+    :return: The rendered template for the 'About Us' page.
+    :rtype: str
+    """
     return render_template("about_us.html")
 
 
 @app.route("/project-motivation")
 def motivation():
-    """Routes '/project-motivation' to 'motivation.html'"""
+    """
+    Serve the 'Project Motivation' page.
+
+    :return: The rendered template for the 'Project Motivation' page.
+    :rtype: str
+    """
     return render_template("motivation.html")
