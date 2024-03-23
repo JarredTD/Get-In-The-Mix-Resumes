@@ -1,6 +1,6 @@
 # Get-In-The-Mix-Resumes
 
-![build](https://github.com/JarredTD/Get-In-The-Mix-Resumes/actions/workflows/main.yml>/badge.svg)
+![CI](https://github.com/JarredTD/Get-In-The-Mix-Resumes/actions/workflows/main.yml>/badge.svg)
 
 ## Introduction
 
