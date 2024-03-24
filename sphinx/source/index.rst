@@ -38,6 +38,7 @@ Module Documentation
    :maxdepth: 2
 
    application/app
+   application/tests
 
 Contributing
 ============

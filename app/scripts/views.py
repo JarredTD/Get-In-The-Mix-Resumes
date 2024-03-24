@@ -5,7 +5,7 @@ from app import app
 
 
 @app.route("/")
-def index():
+def index() -> str:
     """
     Serve the main index page.
 
@@ -16,7 +16,7 @@ def index():
 
 
 @app.route("/about-us")
-def about_us():
+def about_us() -> str:
     """
     Serve the 'About Us' page.
 
@@ -27,7 +27,7 @@ def about_us():
 
 
 @app.route("/project-motivation")
-def motivation():
+def motivation() -> str:
     """
     Serve the 'Project Motivation' page.
 
