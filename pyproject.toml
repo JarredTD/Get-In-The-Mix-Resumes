@@ -14,7 +14,7 @@ addopts = "--cov=app --cov-branch  --cov-report=term-missing --cov-report=html:b
 testpaths = ["tests"]
 
 [tool.coverage.run]
-omit = ["app/__main__.py", "app/constants.py"]
+omit = []
 data_file = "build/tools/pytest/.coverage"
 
 [tool.coverage.report]
