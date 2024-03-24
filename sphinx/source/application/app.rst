@@ -6,14 +6,14 @@ This part of the documentation focuses on the individual route functions within 
 Index Route
 ------------
 
-.. autofunction:: app.index
+.. autofunction:: app.views.index
 
 About Us Route
 ---------------
 
-.. autofunction:: app.about_us
+.. autofunction:: app.scripts.views.about_us
 
 Project Motivation Route
 -------------------------
 
-.. autofunction:: app.motivation
+.. autofunction:: app.scripts.views.motivation
