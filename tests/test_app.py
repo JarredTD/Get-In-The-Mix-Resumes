@@ -23,7 +23,8 @@ class FlaskTestCase(unittest.TestCase):
 
     def test_index(self):
         """
-        Verify that the index page returns a status code of 200 and the content type is HTML.
+        Verify that the index page returns a status code of 200
+        and the content type is HTML.
         """
         response = self.app.get("/")
         self.assertEqual(response.status_code, 200)
