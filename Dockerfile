@@ -1,11 +1,13 @@
 FROM python:3.12-slim
 
-RUN mkdir app/
+RUN mkdir src
+RUN mkdir src/app
+WORKDIR /src
 
-WORKDIR /app
-COPY . /app
 
-RUN pip3 install --no-cache-dir -r app-requirements.txt
+COPY ./app /src/app
+
+RUN pip3 install --no-cache-dir -r app/app-requirements.txt
 
 EXPOSE 8080
 

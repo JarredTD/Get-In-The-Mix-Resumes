@@ -6,7 +6,7 @@ source ./scripts/build.sh
 
 clear
 
-docker build -t gitmr-app ./app/
+docker build -t gitmr-app .
 
 if docker container inspect gitmr-app &> /dev/null; then
     echo "Removing existing gitmr-app container..."
