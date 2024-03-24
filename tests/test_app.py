@@ -4,7 +4,7 @@
 # pylint: disable=no-name-in-module
 
 import unittest
-from app.app import app
+from app import app
 
 
 class FlaskTestCase(unittest.TestCase):
