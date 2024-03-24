@@ -15,6 +15,12 @@ author = "Jarred & Evan"
 
 extensions = ["sphinx.ext.autodoc", "sphinx_autodoc_typehints"]
 
+autodoc_default_options = {
+    "member-order": "bysource",
+    "special-members": "__init__",
+    "undoc-members": True,
+    "exclude-members": "__weakref__",
+}
 
 templates_path = ["_templates"]
 exclude_patterns = []
