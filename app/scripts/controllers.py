@@ -2,8 +2,18 @@
 
 from typing import Union, List, Tuple
 from flask import jsonify, request, Response
-
+from .models import ResumeData
 from app import app
+
+
+@app.route("/test_db")
+def test_db():
+    """Sanity Check that db is connected"""
+    result = ResumeData.query.first()
+    if result:
+        return f"Database is connected. Found: {result}"
+    else:
+        return "Database is connected but found no data."
 
 
 @app.route("/load", methods=["GET", "POST"])
