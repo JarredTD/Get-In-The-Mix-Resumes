@@ -22,4 +22,9 @@ jobs:
         run: pylint --rcfile pyproject.toml app tests
 
       - name: Test
-        run: pytest && coveralls
+        run: pytest
+
+      - name: Coverage Upload
+        run: coveralls --rcfile=pyproject.toml --service=github
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
