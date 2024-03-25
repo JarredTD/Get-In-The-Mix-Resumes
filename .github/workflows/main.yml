@@ -25,6 +25,8 @@ jobs:
         run: pytest
 
       - name: Coverage Upload
-        run: coveralls --rcfile=pyproject.toml --service=github
+        run: |
+          git config --global --add safe.directory /__w/Get-In-The-Mix-Resumes/Get-In-The-Mix-Resumes
+          coveralls --rcfile=pyproject.toml --service=github
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
