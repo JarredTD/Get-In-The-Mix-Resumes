@@ -11,6 +11,7 @@ RUN pip3 install --no-cache-dir -r app/app-requirements.txt
 
 EXPOSE 8080
 
+ENV DATABASE_URI=sqlite:///user-resume-data.db
 ENV FLASK_APP=app/__init__.py
 
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "app:app"]
