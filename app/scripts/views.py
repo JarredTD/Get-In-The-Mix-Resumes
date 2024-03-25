@@ -1,10 +1,11 @@
 """Views component of MVC paradigm"""
 
-from flask import render_template
-from app import app
+from flask import Blueprint, render_template
+
+views_bp = Blueprint("views_bp", __name__)
 
 
-@app.route("/")
+@views_bp.route("/")
 def index() -> str:
     """
     Serve the main index page.
@@ -15,7 +16,7 @@ def index() -> str:
     return render_template("index.html")
 
 
-@app.route("/about-us")
+@views_bp.route("/about-us")
 def about_us() -> str:
     """
     Serve the 'About Us' page.
@@ -26,7 +27,7 @@ def about_us() -> str:
     return render_template("about_us.html")
 
 
-@app.route("/project-motivation")
+@views_bp.route("/project-motivation")
 def motivation() -> str:
     """
     Serve the 'Project Motivation' page.

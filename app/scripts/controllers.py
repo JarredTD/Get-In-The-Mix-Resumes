@@ -1,13 +1,14 @@
 """Controller for the flask app"""
 
 from typing import Union, List, Tuple
-from flask import jsonify, request, Response
+from flask import jsonify, request, Response, Blueprint
 from .models import ResumeData
-from app import app
+
+controllers_bp = Blueprint("controllers_bp", __name__)
 
 
-@app.route("/test_db")
-def test_db():
+@controllers_bp.route("/test-db")
+def test_db() -> str:
     """Sanity Check that db is connected"""
     result = ResumeData.query.first()
     if result:
@@ -16,8 +17,8 @@ def test_db():
         return "Database is connected but found no data."
 
 
-@app.route("/load", methods=["GET", "POST"])
-def load() -> Union[str, Response, Tuple[Response, int]]:
+@controllers_bp.route("/load", method=["POST", "GET"])
+def load(request) -> Union[str, Response, Tuple[Response, int]]:
     """
     Loads a list of resume ids, or data specific to an id.
 

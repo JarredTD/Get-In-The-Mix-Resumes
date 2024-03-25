@@ -3,16 +3,24 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from app.config import Config
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = Config.DATABASE_URI
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy()
+migrate = Migrate()
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
-# pylint: disable=wrong-import-position
-from app.scripts import models
-from app.scripts import controllers
-from app.scripts import views
+def create_app(config_class):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    with app.app_context():
+        # pylint: disable=wrong-import-position
+        from app.scripts import models
+        from app.scripts.controllers import controllers_bp
+        from app.scripts.views import views_bp
+
+        app.register_blueprint(views_bp)
+
+    return app

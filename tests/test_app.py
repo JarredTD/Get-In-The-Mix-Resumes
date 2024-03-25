@@ -4,44 +4,63 @@
 # pylint: disable=no-name-in-module
 
 import unittest
-from app import app
+from app import create_app, db
+from app.config import TestingConfig
 
 
 class FlaskTestCase(unittest.TestCase):
     """
     A collection of unit tests for the Flask application.
 
-    This suite tests the routing and responses for various pages within the application.
+    This suite tests the routing, responses, and database interactions within the application.
     """
 
-    def setUp(self) -> None:
+    def setUp(self):
         """
-        Prepare the test client for the Flask application.
+        Prepare the test client and database for the Flask application.
         """
-        self.app = app.test_client()
-        self.app.testing = True
+        # Use the application factory to create a test app with TestingConfig
+        self.app = create_app(TestingConfig)
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        self.client = self.app.test_client()
 
-    def test_index(self) -> None:
+        # Create all database tables
+        db.create_all()
+
+    def tearDown(self):
+        """
+        Clean up after each test case.
+        """
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
+
+    def test_index_route(self):
         """
         Verify that the index page returns a status code of 200
         and the content type is HTML.
         """
-        response = self.app.get("/")
+        response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
         self.assertIn("text/html", response.content_type)
 
-    def test_about_us(self) -> None:
+    def test_about_us_route(self):
         """
         Ensure the 'About Us' page is accessible and returns HTML content.
         """
-        response = self.app.get("/about-us")
+        response = self.client.get("/about-us")
         self.assertEqual(response.status_code, 200)
         self.assertIn("text/html", response.content_type)
 
-    def test_motivation(self) -> None:
+    def test_motivation_route(self):
         """
         Test that the 'Project Motivation' page is routed correctly and serves HTML.
         """
-        response = self.app.get("/project-motivation")
+        response = self.client.get("/project-motivation")
         self.assertEqual(response.status_code, 200)
         self.assertIn("text/html", response.content_type)
+
+
+if __name__ == "__main__":
+    unittest.main()
