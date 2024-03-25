@@ -31,7 +31,7 @@ exclude_lines = [
 [tool.pylint]
 disable = ["E0401"]
 max-line-length = 88
-ignore-paths = [".venv/*", "sphinx/*"]
+ignore-paths = [".venv/*", "sphinx/*", "app/migrations/*"]
 source = ["app", "tests"]
 fail-under = 5
 
