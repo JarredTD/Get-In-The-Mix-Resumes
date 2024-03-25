@@ -1,4 +1,4 @@
-Flask Application Routes
+Flask Application Views
 ========================
 
 .. automodule:: app.scripts.views

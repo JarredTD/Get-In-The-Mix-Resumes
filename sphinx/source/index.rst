@@ -37,7 +37,9 @@ Module Documentation
 .. toctree::
    :maxdepth: 2
 
-   application/app
+   application/view
+   application/model
+   application/controller
    application/tests
 
 Contributing
