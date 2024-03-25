@@ -1,7 +1,7 @@
 # Get-In-The-Mix-Resumes
 
 ![build](https://github.com/JarredTD/Get-In-The-Mix-Resumes/actions/workflows/main.yml/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/JarredTD/Get-In-The-Mix-Resumes/badge.svg?branch=)](https://coveralls.io/github/JarredTD/Get-In-The-Mix-Resumes?branch=)
+[![Coverage Status](https://coveralls.io/repos/github/JarredTD/Get-In-The-Mix-Resumes/badge.svg?branch=main)](https://coveralls.io/github/JarredTD/Get-In-The-Mix-Resumes?branch=main)
 
 ## Introduction
 
