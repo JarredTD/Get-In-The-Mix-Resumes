@@ -12,6 +12,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# pylint: disable=wrong-import-position
 from app.scripts import models
 from app.scripts import controllers
 from app.scripts import views

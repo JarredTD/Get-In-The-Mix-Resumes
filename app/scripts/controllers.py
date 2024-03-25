@@ -1,7 +1,7 @@
 """Controller for the flask app"""
 
 from typing import Union, List, Tuple
-from flask import Flask, jsonify, request, Response
+from flask import jsonify, request, Response
 
 from app import app
 
@@ -17,22 +17,24 @@ def load() -> Union[str, Response, Tuple[Response, int]]:
     data specific to that resume ID.
 
     :return: For GET requests, a string representation of a list of resume IDs.
-             For POST requests, returns the result of `loadResume(id_value)` function call.
+             For POST requests, returns the result of `loadResume(id_value)`
+             function call.
     :rtype: str for GET requests; Flask `Response` for POST requests.
 
-    :raises BadRequest: If the POST request does not include a JSON payload with an "id" key.
+    :raises BadRequest: If the POST request does not include a JSON payload
+                        with an "id" key.
     """
     if request.method == "POST":
         if not request.json or "id" not in request.json:
             return jsonify({"error": "Bad request"}), 400
 
         id_value = request.json["id"]
-        return loadResume(id_value)
+        return load_resume(id_value)
 
-    return ", ".join(getResumeIds())
+    return ", ".join(get_resume_ids())
 
 
-def loadResume(id_value: str) -> Union[Response, Tuple[Response, int]]:
+def load_resume(id_value: str) -> Union[Response, Tuple[Response, int]]:
     """
     Loads data of a specific resume.
 
@@ -45,7 +47,7 @@ def loadResume(id_value: str) -> Union[Response, Tuple[Response, int]]:
     return jsonify({"message": "Resume loaded", "id": id_value}), 200
 
 
-def getResumeIds() -> List[str]:
+def get_resume_ids() -> List[str]:
     """
     Loads all resume IDs from the database.
 
