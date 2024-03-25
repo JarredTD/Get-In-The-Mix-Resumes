@@ -337,3 +337,4 @@ $RECYCLE.BIN/
 
 app/config.py
 **/*.db
+scripts/env.sh
