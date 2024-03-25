@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: pip3 install -r app/app-requirements.txt black pylint pytest pytest-cov
+        run: pip3 install -r app/app-requirements.txt black pylint pytest pytest-cov coveralls
 
       - name: Formatter
         run: black --config pyproject.toml app tests --check
