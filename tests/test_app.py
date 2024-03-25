@@ -12,7 +12,8 @@ class FlaskTestCase(unittest.TestCase):
     """
     A collection of unit tests for the Flask application.
 
-    This suite tests the routing, responses, and database interactions within the application.
+    This suite tests the routing, responses,
+    and database interactions within the application.
     """
 
     def setUp(self):

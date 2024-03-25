@@ -1,7 +1,7 @@
 """Controller for the flask app"""
 
 from typing import Union, List, Tuple
-from flask import jsonify, request, Response, Blueprint
+from flask import jsonify, Response, Blueprint
 from .models import ResumeData
 
 controllers_bp = Blueprint("controllers_bp", __name__)
@@ -13,12 +13,12 @@ def test_db() -> str:
     result = ResumeData.query.first()
     if result:
         return f"Database is connected. Found: {result}"
-    else:
-        return "Database is connected but found no data."
+
+    return "Database is connected but found no data."
 
 
-@controllers_bp.route("/load", method=["POST", "GET"])
-def load(request) -> Union[str, Response, Tuple[Response, int]]:
+@controllers_bp.route("/load", methods=["POST", "GET"])
+def load(route_request) -> Union[str, Response, Tuple[Response, int]]:
     """
     Loads a list of resume ids, or data specific to an id.
 
@@ -27,19 +27,20 @@ def load(request) -> Union[str, Response, Tuple[Response, int]]:
     For POST requests, it expects a JSON payload with an "id" key and returns
     data specific to that resume ID.
 
-    :return: For GET requests, a string representation of a list of resume IDs.
-             For POST requests, returns the result of `loadResume(id_value)`
-             function call.
+    :param route_request: The request object.
+    :type route_request: Flask request
+    :returns: For GET requests, a string representation of a list of resume IDs.
+                For POST requests, returns the result of ``loadResume(id_value)``
+                function call.
     :rtype: str for GET requests; Flask `Response` for POST requests.
-
     :raises BadRequest: If the POST request does not include a JSON payload
                         with an "id" key.
     """
-    if request.method == "POST":
-        if not request.json or "id" not in request.json:
+    if route_request.method == "POST":
+        if not route_request.json or "id" not in route_request.json:
             return jsonify({"error": "Bad request"}), 400
 
-        id_value = request.json["id"]
+        id_value = route_request.json["id"]
         return load_resume(id_value)
 
     return ", ".join(get_resume_ids())
