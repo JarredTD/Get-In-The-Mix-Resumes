@@ -2,11 +2,13 @@
 
 # pylint: disable=import-error
 # pylint: disable=no-name-in-module
+import json
 import pytest
 import unittest
 from app import create_app, db
 from app.config import TestingConfig
 from app.scripts.models import ResumeData
+from app.scripts.controllers import load_resume_ids, load_resume
 
 
 class FlaskTestCase(unittest.TestCase):
@@ -120,6 +122,91 @@ class FlaskTestCase(unittest.TestCase):
 
         deleted = ResumeData.query.filter_by(id=to_delete.id).first()
         self.assertIsNone(deleted)
+
+    def test_load_resume_ids(self):
+        """
+        Test usage of the load_resume_ids endpoint.
+        """
+        john = ResumeData(id=0, first_name="John", last_name="Smith")
+        alice = ResumeData(id=1, first_name="Alice", last_name="Land")
+        jane = ResumeData(id=2, first_name="Jane", last_name="Mary")
+
+        db.session.add(john)
+        db.session.add(alice)
+        db.session.add(jane)
+        db.session.commit()
+
+        resume_ids = self.client.get("/load-resume-ids").json
+
+        for i in range(0, 3):
+            self.assertEqual(resume_ids[i], i)
+
+    def test_load_resume_success(self):
+        """
+        Test usage of the load_resume endpoint on success
+        """
+
+        resume_request = {
+            "id": 0,
+        }
+
+        john = ResumeData(id=0, first_name="John", last_name="Smith")
+        db.session.add(john)
+        db.session.commit()
+
+        resume = self.client.post(
+            "/load-resume",
+            data=json.dumps(resume_request),
+            content_type="application/json",
+        )
+
+        resume_data = resume.json
+
+        self.assertEqual(resume.status_code, 200)
+        self.assertIn("application/json", resume.content_type)
+        self.assertEqual(resume_data["first_name"], "John")
+        self.assertEqual(resume_data["id"], 0)
+        self.assertEqual(resume_data["last_name"], "Smith")
+
+    def test_load_resume_bad_request(self):
+        """
+        Test usage of the load_resume endpoint on failure due to bad request
+        """
+
+        resume_request = {
+            "name": "john",
+        }
+
+        john = ResumeData(id=0, first_name="John", last_name="Smith")
+        db.session.add(john)
+        db.session.commit()
+
+        resume = self.client.post(
+            "/load-resume",
+            data=json.dumps(resume_request),
+            content_type="application/json",
+        )
+
+        self.assertEqual(resume.status_code, 400)
+        self.assertIn("application/json", resume.content_type)
+
+    def test_load_resume_not_found(self):
+        """
+        Test usage of the load_resume endpoint on failure due to resume not found
+        """
+
+        resume_request = {
+            "id": "0",
+        }
+
+        resume = self.client.post(
+            "/load-resume",
+            data=json.dumps(resume_request),
+            content_type="application/json",
+        )
+
+        self.assertEqual(resume.status_code, 404)
+        self.assertIn("application/json", resume.content_type)
 
 
 if __name__ == "__main__":
