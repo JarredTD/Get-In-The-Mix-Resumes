@@ -43,6 +43,12 @@ class FlaskTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
+    def test_db_route(self):
+        """Verify test_db route works"""
+        response = self.client.get("/test-db")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("text/html", response.content_type)
+
     def test_index_route(self):
         """
         Verify that the index page returns a status code of 200
