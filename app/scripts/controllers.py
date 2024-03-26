@@ -13,14 +13,12 @@ def test_db() -> str:
     """
     Sanity Check that db is connected
 
-    :returns: Message that db is connected, and the first query inside it
+    :returns: Message that db is connected
     :rtype: str
     """
     result = ResumeData.query.first()
-    if result:
-        return f"Database is connected. Found: {result}"
 
-    return "Database is connected but found no data."
+    return "Database is connected."
 
 
 @controllers_bp.route("/load-resume-ids", methods=["GET"])
