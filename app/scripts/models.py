@@ -1,7 +1,7 @@
 """Models for the Flask App"""
 
-from typing_extensions import Any, Dict
 from datetime import datetime
+from typing_extensions import Any, Dict
 from app import db
 
 
