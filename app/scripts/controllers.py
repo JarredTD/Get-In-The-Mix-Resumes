@@ -1,15 +1,20 @@
 """Controller for the flask app"""
 
-from typing import Union, List, Tuple
-from flask import jsonify, Response, Blueprint
+from typing import List, Union
+from flask import jsonify, request, Blueprint
 from .models import ResumeData
 
 controllers_bp = Blueprint("controllers_bp", __name__)
 
 
-@controllers_bp.route("/test-db")
+@controllers_bp.route("/test-db", methods=["GET"])
 def test_db() -> str:
-    """Sanity Check that db is connected"""
+    """
+    Sanity Check that db is connected
+
+    :returns: Message that db is connected, and the first query inside it
+    :rtype: str
+    """
     result = ResumeData.query.first()
     if result:
         return f"Database is connected. Found: {result}"
@@ -17,54 +22,41 @@ def test_db() -> str:
     return "Database is connected but found no data."
 
 
-@controllers_bp.route("/load", methods=["POST", "GET"])
-def load(route_request) -> Union[str, Response, Tuple[Response, int]]:
+@controllers_bp.route("/load-resume-ids", methods=["GET"])
+def load_resume_ids():
     """
-    Loads a list of resume ids, or data specific to an id.
+    Queries all ids found in ResumeData table
 
-    This endpoint responds to both GET and POST requests.
-    For GET requests, it returns a list of all resume IDs.
-    For POST requests, it expects a JSON payload with an "id" key and returns
-    data specific to that resume ID.
-
-    :param route_request: The request object.
-    :type route_request: Flask request
-    :returns: For GET requests, a string representation of a list of resume IDs.
-                For POST requests, returns the result of ``loadResume(id_value)``
-                function call.
-    :rtype: str for GET requests; Flask `Response` for POST requests.
-    :raises BadRequest: If the POST request does not include a JSON payload
-                        with an "id" key.
+    :returns: List of all ids in ResumeData table
+    :rtype: List of Ints
     """
-    if route_request.method == "POST":
-        if not route_request.json or "id" not in route_request.json:
-            return jsonify({"error": "Bad request"}), 400
+    ids = (
+        ResumeData.query.with_entities(ResumeData.id)
+        .order_by(ResumeData.entry_date)
+        .all()
+    )
+    id_list = [id[0] for id in ids]
+    return jsonify(id_list)
 
-        id_value = route_request.json["id"]
-        return load_resume(id_value)
 
-    return ", ".join(get_resume_ids())
-
-
-def load_resume(id_value: str) -> Union[Response, Tuple[Response, int]]:
+@controllers_bp.route("/load-resume", methods=["POST"])
+def load_resume():
     """
-    Loads data of a specific resume.
+    Queries for a specific resume in the ResumeData table
 
-    :param id_value: The ID of the resume to load.
-    :type id_value: str
-    :return: A JSON response with the resume data.
-    :rtype: Flask `Response`
+    :returns: A json of the resume data for the found resume
+            or an error for invalid request or resume not found
+    :rtype: Json object
     """
+    resume_request = request.get_json()
+    resume_id = resume_request.get("id")
 
-    return jsonify({"message": "Resume loaded", "id": id_value}), 200
+    if resume_id is None:
+        return jsonify({"error": "Missing ID"}), 400
 
+    resume = ResumeData.query.filter_by(id=resume_id).first()
 
-def get_resume_ids() -> List[str]:
-    """
-    Loads all resume IDs from the database.
+    if resume is None:
+        return jsonify({"error": "No Resume Found"}), 404
 
-    :return: A list of resume IDs.
-    :rtype: List[str]
-    """
-
-    return ["1", "2", "3"]
+    return jsonify(resume.to_dict())
