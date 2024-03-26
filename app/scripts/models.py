@@ -1,5 +1,7 @@
 """Models for the Flask App"""
 
+from typing_extensions import Any, Dict
+from datetime import datetime
 from app import db
 
 
@@ -22,8 +24,11 @@ class ResumeData(db.Model):
     """
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(255), nullable=False, index=True)
-    last_name = db.Column(db.String(255), nullable=False, index=True)
+    first_name = db.Column(db.String(255), nullable=False)
+    last_name = db.Column(db.String(255), nullable=False)
+    entry_date = db.Column(
+        db.DateTime, nullable=False, index=True, default=datetime.utcnow
+    )
 
     def __repr__(self):
         """
@@ -35,3 +40,14 @@ class ResumeData(db.Model):
         :rtype: str
         """
         return f"<User {self.first_name} {self.last_name}>"
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Returns a dict structure of the table
+        """
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "date": self.entry_date,
+        }
