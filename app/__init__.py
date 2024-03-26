@@ -3,12 +3,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from .config import DevelopmentConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
 
 
-def create_app(config_class):
+def create_app(config_class=DevelopmentConfig):
     """Used to create the app from a config"""
     app = Flask(__name__)
     app.config.from_object(config_class)
