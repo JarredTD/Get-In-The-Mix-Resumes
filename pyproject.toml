@@ -18,7 +18,7 @@ omit = []
 data_file = "build/tools/pytest/.coverage"
 
 [tool.coverage.report]
-fail_under = 0
+fail_under = 80
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -33,7 +33,7 @@ disable = ["E0401"]
 max-line-length = 88
 ignore-paths = [".venv/*", "sphinx/*", "app/migrations/*"]
 source = ["app", "tests"]
-fail-under = 0
+fail-under = 5
 
 [tool.pyright]
 venvPath = "."
