@@ -2,6 +2,7 @@
 
 from typing import List, Union
 from flask import jsonify, request, Blueprint
+from flask.wrappers import Response
 from .models import ResumeData
 
 controllers_bp = Blueprint("controllers_bp", __name__)
@@ -23,7 +24,7 @@ def test_db() -> str:
 
 
 @controllers_bp.route("/load-resume-ids", methods=["GET"])
-def load_resume_ids():
+def load_resume_ids() -> Response:
     """
     Queries all ids found in ResumeData table
 
@@ -35,12 +36,12 @@ def load_resume_ids():
         .order_by(ResumeData.entry_date)
         .all()
     )
-    id_list = [id[0] for id in ids]
+    id_list: List[int] = [id[0] for id in ids]
     return jsonify(id_list)
 
 
 @controllers_bp.route("/load-resume", methods=["POST"])
-def load_resume():
+def load_resume() -> Union[Response, tuple]:
     """
     Queries for a specific resume in the ResumeData table
 

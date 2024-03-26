@@ -1,10 +1,13 @@
 """Unit tests for the Flask application defined in app.py."""
 
+# Disabled for false-positives
 # pylint: disable=import-error
 # pylint: disable=no-name-in-module
+# pylint: disable=unused-import
+
+import unittest
 import json
 import pytest
-import unittest
 from app import create_app, db
 from app.config import TestingConfig
 from app.scripts.models import ResumeData

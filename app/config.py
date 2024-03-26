@@ -2,6 +2,8 @@
 
 import os
 
+# pylint: disable=too-few-public-methods
+
 
 class Config:
     """Base configuration class."""

@@ -20,6 +20,8 @@ def create_app(config_class=DevelopmentConfig):
     with app.app_context():
         # pylint: disable=wrong-import-position
         # pylint: disable=import-outside-toplevel
+        # pylint: disable=unused-import
+
         from app.scripts import models
         from app.scripts.controllers import controllers_bp
         from app.scripts.views import views_bp
