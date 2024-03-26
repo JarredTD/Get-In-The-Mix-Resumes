@@ -40,6 +40,7 @@ Module Documentation
    application/view
    application/model
    application/controller
+   application/config
    application/tests
 
 Contributing
