@@ -10,7 +10,7 @@ exclude = '''
 '''
 
 [tool.pytest.ini_options]
-addopts = "--cov=app --cov-branch  --cov-report=term-missing --cov-report=html:build/tools/pytest/htmlcov --cov-report=xml:build/tools/pytest/coverage.xml --verbose"
+addopts = "--cov=app --cov-branch  --cov-report=term-missing --cov-report=html:build/tools/pytest/htmlcov --cov-report=xml:build/tools/pytest/coverage.xml --disable-warnings "
 testpaths = ["src/tests"]
 
 [tool.coverage.run]
