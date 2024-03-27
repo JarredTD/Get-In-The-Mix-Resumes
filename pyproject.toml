@@ -11,7 +11,7 @@ exclude = '''
 
 [tool.pytest.ini_options]
 addopts = "--cov=app --cov-branch  --cov-report=term-missing --cov-report=html:build/tools/pytest/htmlcov --cov-report=xml:build/tools/pytest/coverage.xml --verbose"
-testpaths = ["tests"]
+testpaths = ["src/tests"]
 
 [tool.coverage.run]
 omit = []
@@ -31,8 +31,8 @@ exclude_lines = [
 [tool.pylint]
 disable = ["E0401"]
 max-line-length = 88
-ignore-paths = [".venv/*", "sphinx/*", "app/migrations/*"]
-source = ["app", "tests"]
+ignore-paths = [".venv/*", "sphinx/*", "src/app/migrations/*"]
+source = ["src/app", "src/tests"]
 fail-under = 5
 
 [tool.pyright]
