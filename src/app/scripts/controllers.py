@@ -16,7 +16,7 @@ def test_db() -> str:
     :returns: Message that db is connected
     :rtype: str
     """
-    result = ResumeData.query.first()
+    ResumeData.query.first()
 
     return "Database is connected."
 
