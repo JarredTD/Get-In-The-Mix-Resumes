@@ -1,10 +1,13 @@
 #!/bin/bash
 
-SPHINX_PATH="build/tools/sphinx"
+SPHINX_PATH="/build/tools/sphinx"
 
 mkdir -p "$SPHINX_PATH"
 
 source ./venv/bin/activate
 
-make html 2>&1 | tee "$SPHINX_PATH/sphinx_output.txt"
+cd sphinx
+make html 2>&1 | tee "../$SPHINX_PATH/sphinx_output.txt"
+cd ..
+
 open build/sphinx/html/index.html
