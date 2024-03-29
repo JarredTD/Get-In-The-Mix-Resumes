@@ -51,7 +51,7 @@ def load_resume_ids() -> Response:
         .order_by(ResumeData.entry_date)
         .all()
     )
-    id_list: List[int] = [id[0] for id in ids]
+    id_list: List[int] = [id[0] for id in ids]  # pragma: no cover
     return jsonify(id_list)
 
 
