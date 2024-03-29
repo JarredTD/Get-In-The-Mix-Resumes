@@ -24,9 +24,24 @@ class UserAuthenticationTestCase(BaseTestCase):
     def test_user_registration(self):
         """Test user can register successfully."""
         response = self.register(
-            NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD
+            NEW_USER_USERNAME,
+            NEW_USER_PASSWORD,
+            NEW_USER_PASSWORD,
+            follow_redirects=False,
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(User.query.filter_by(username=NEW_USER_USERNAME).first())
+
+    def test_user_registration_to_login(self):
+        """Tests successful registration redirects to login"""
+        response = self.register(
+            NEW_USER_USERNAME,
+            NEW_USER_PASSWORD,
+            NEW_USER_PASSWORD,
+            follow_redirects=True,
         )
         self.assertEqual(response.status_code, 200)
+        self.assertIn(LOGIN, response.data.decode())
         self.assertTrue(User.query.filter_by(username=NEW_USER_USERNAME).first())
 
     def test_user_login_with_next_parameter(self):
@@ -48,7 +63,18 @@ class UserAuthenticationTestCase(BaseTestCase):
     def test_user_login(self):
         """Test registered user can login."""
         self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
-        response = self.login(NEW_USER_USERNAME, NEW_USER_PASSWORD)
+        response = self.login(
+            NEW_USER_USERNAME, NEW_USER_PASSWORD, follow_redirects=False
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_user_login_to_home(self):
+        """Test registered user can login."""
+        self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
+        response = self.login(
+            NEW_USER_USERNAME,
+            NEW_USER_PASSWORD,
+        )
         self.assertEqual(response.status_code, 200)
         self.assertIn(HOME, response.data.decode())
 
