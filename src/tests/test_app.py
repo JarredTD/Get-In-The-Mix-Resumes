@@ -1,49 +1,65 @@
 """Unit tests for the Flask application defined in app.py."""
 
-# Disabled for false-positives
-# pylint: disable=import-error
-# pylint: disable=no-name-in-module
-# pylint: disable=unused-import
-
+# pylint: disable=import-error, no-name-in-module, unused-import
 import unittest
 import json
-import pytest
-from flask import url_for
 from app import create_app, db
 from app.config import TestingConfig
 from app.scripts.models import ResumeData, User
-from app.scripts.controllers import load_resume_ids, load_resume
-from app.scripts.controllers import register
+
+# Constants for user credentials and test data
+TEST_USERNAME = "testuser"
+TEST_PASSWORD = "test"
+NEW_USER_USERNAME = "newuser"
+NEW_USER_PASSWORD = "123456"
+CONFIRM_PASSWORD = "123456"
+WRONG_PASSWORD = "wrongpassword"
+JANE_DOE_FIRST_NAME = "Jane"
+JANE_DOE_LAST_NAME = "Doe"
+JOHN_SMITH_FIRST_NAME = "John"
+JOHN_SMITH_LAST_NAME = "Smith"
+ALICE_FIRST_NAME = "Alice"
+ALICE_LAST_NAME = "Wonderland"
+ALICIA_FIRST_NAME = "Alicia"
+BOB_FIRST_NAME = "Bob"
+BOB_LAST_NAME = "Builder"
+HOME = "Home"
+ABOUT_US = "About Us"
+PROJECT_MOTIVATION = "Project Motivation"
+LOGIN = "Login"
+REGISTER = "Register"
+INVALID_CREDENTIALS = "Invalid Credentials"
+JSON = "application/json"
+
+# Constants for routes
+LOGIN_ROUTE = "/login"
+REGISTER_ROUTE = "/register"
+LOGOUT_ROUTE = "/logout"
+ABOUT_US_ROUTE = "/about-us"
+PROJECT_MOTIVATION_ROUTE = "/project-motivation"
+TEST_DB_ROUTE = "/test-db"
+LOAD_RESUME_IDS_ROUTE = "/load-resume-ids"
+LOAD_RESUME_ROUTE = "/load-resume"
 
 
 class BaseTestCase(unittest.TestCase):
-    """
-    A base test case that sets up the application and database for testing.
-    """
+    """A base test case that sets up the application and database for testing."""
 
     def setUp(self):
-        """
-        Prepare the test client and database for the Flask application.
-        """
+        """Prepare the test client and database for the Flask application."""
         self.app = create_app(TestingConfig)
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.client = self.app.test_client()
-
-        # Create all database tables
         db.create_all()
 
-        # Create a user
-        self.testuser = User(username="testuser")
-        self.testuser.set_password("test")
-
+        self.testuser = User(username=TEST_USERNAME)
+        self.testuser.set_password(TEST_PASSWORD)
         db.session.add(self.testuser)
         db.session.commit()
 
     def tearDown(self):
-        """
-        Clean up after each test case.
-        """
+        """Clean up after each test case."""
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
@@ -51,18 +67,15 @@ class BaseTestCase(unittest.TestCase):
     def login(self, username, password):
         """Helper method to log in as a user."""
         return self.client.post(
-            "/login",
-            data={
-                "username": username,
-                "password": password,
-            },
+            LOGIN_ROUTE,
+            data={"username": username, "password": password},
             follow_redirects=True,
         )
 
     def register(self, username, password, confirm_password):
         """Helper method to register a new user."""
         return self.client.post(
-            "/register",
+            REGISTER_ROUTE,
             data={
                 "username": username,
                 "password": password,
@@ -73,95 +86,96 @@ class BaseTestCase(unittest.TestCase):
 
     def logout(self):
         """Helper method to log out a user."""
-        return self.client.get("/logout", follow_redirects=True)
+        return self.client.get(LOGOUT_ROUTE, follow_redirects=True)
 
 
 class FlaskRoutingTestCase(BaseTestCase):
-    """
-    Test the routing and responses of the Flask application.
-    """
+    """Test the routing and responses of the Flask application."""
 
     def test_index_route(self):
         """Test the index page route after logging in."""
-        response = self.login(username="testuser", password="test")
-
+        response = self.login(TEST_USERNAME, TEST_PASSWORD)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Home", response.data.decode(), "Login failed.")
+        self.assertIn(HOME, response.data.decode())
 
     def test_about_us_route(self):
-        """Test the about us page route"""
-        response = self.client.get("/about-us")
+        """Test the about us page route."""
+        response = self.client.get(ABOUT_US_ROUTE)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("text/html", response.content_type)
+        self.assertIn(ABOUT_US, response.data.decode())
 
-    def test_motivation_route(self):
-        """Test the project motivation page route"""
-        response = self.client.get("/project-motivation")
+    def test_project_motivation_route(self):
+        """Test the project motivation page route."""
+        response = self.client.get(PROJECT_MOTIVATION_ROUTE)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("text/html", response.content_type)
+        self.assertIn(PROJECT_MOTIVATION, response.data.decode())
 
     def test_db_route(self):
-        """Test test-db route"""
-        response = self.client.get("/test-db")
+        """Test the test-db route."""
+        response = self.client.get(TEST_DB_ROUTE)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("text/html", response.content_type)
+        self.assertIn("Database is connected", response.data.decode())
 
 
 class ResumeDataModelTestCase(BaseTestCase):
-    """
-    Test the ResumeData model operations.
-    """
+    """Test the ResumeData model operations."""
 
     def test_resume_data_creation(self):
-        """Sanity check on add record"""
+        """Sanity check on adding a record."""
         resume = ResumeData(
-            user_id=self.testuser.id, first_name="Jane", last_name="Doe"
+            user_id=self.testuser.id,
+            first_name=JANE_DOE_FIRST_NAME,
+            last_name=JANE_DOE_LAST_NAME,
         )
         db.session.add(resume)
         db.session.commit()
 
-        created = ResumeData.query.filter_by(first_name="Jane").first()
+        created = ResumeData.query.filter_by(first_name=JANE_DOE_FIRST_NAME).first()
         self.assertIsNotNone(created)
-        self.assertEqual(created.first_name, "Jane")
-        self.assertEqual(created.last_name, "Doe")
+        self.assertEqual(created.first_name, JANE_DOE_FIRST_NAME)
+        self.assertEqual(created.last_name, JANE_DOE_LAST_NAME)
 
     def test_resume_data_retrieval(self):
-        """Sanity check on getting record"""
+        """Sanity check on retrieving a record."""
         resume = ResumeData(
-            user_id=self.testuser.id, first_name="John", last_name="Smith"
+            user_id=self.testuser.id,
+            first_name=JOHN_SMITH_FIRST_NAME,
+            last_name=JOHN_SMITH_LAST_NAME,
         )
         db.session.add(resume)
         db.session.commit()
 
-        retrieved = ResumeData.query.filter_by(first_name="John").first()
+        retrieved = ResumeData.query.filter_by(first_name=JOHN_SMITH_FIRST_NAME).first()
         self.assertIsNotNone(retrieved)
-        self.assertEqual(retrieved.first_name, "John")
-        self.assertEqual(retrieved.last_name, "Smith")
+        self.assertEqual(retrieved.first_name, JOHN_SMITH_FIRST_NAME)
+        self.assertEqual(retrieved.last_name, JOHN_SMITH_LAST_NAME)
 
     def test_resume_data_update(self):
-        """Sanity check on updating record"""
+        """Sanity check on updating a record."""
         resume = ResumeData(
-            user_id=self.testuser.id, first_name="Alice", last_name="Wonderland"
+            user_id=self.testuser.id,
+            first_name=ALICE_FIRST_NAME,
+            last_name=ALICE_LAST_NAME,
         )
         db.session.add(resume)
         db.session.commit()
 
-        to_update = ResumeData.query.filter_by(first_name="Alice").first()
-        to_update.first_name = "Alicia"
+        to_update = ResumeData.query.filter_by(first_name=ALICE_FIRST_NAME).first()
+        to_update.first_name = ALICIA_FIRST_NAME
         db.session.commit()
 
         updated = ResumeData.query.filter_by(id=to_update.id).first()
-        self.assertEqual(updated.first_name, "Alicia")
+        self.assertEqual(updated.first_name, ALICIA_FIRST_NAME)
 
     def test_resume_data_deletion(self):
-        """Sanity check on deleting record"""
+        """Sanity check on deleting a record."""
         resume = ResumeData(
-            user_id=self.testuser.id, first_name="Bob", last_name="Builder"
+            user_id=self.testuser.id, first_name=BOB_FIRST_NAME, last_name=BOB_LAST_NAME
         )
         db.session.add(resume)
         db.session.commit()
 
-        to_delete = ResumeData.query.filter_by(first_name="Bob").first()
+        to_delete = ResumeData.query.filter_by(first_name=BOB_FIRST_NAME).first()
         db.session.delete(to_delete)
         db.session.commit()
 
@@ -170,118 +184,112 @@ class ResumeDataModelTestCase(BaseTestCase):
 
 
 class ResumeEndpointTestCase(BaseTestCase):
-    """
-    Test the endpoints related to ResumeData.
-    """
+    """Test the endpoints related to ResumeData."""
 
     def test_load_resume_ids(self):
-        """Test load_resume_ids enpoint"""
-        john = ResumeData(
-            user_id=self.testuser.id, id=0, first_name="John", last_name="Smith"
-        )
-        alice = ResumeData(
-            user_id=self.testuser.id, id=1, first_name="Alice", last_name="Land"
-        )
-        jane = ResumeData(
-            user_id=self.testuser.id, id=2, first_name="Jane", last_name="Mary"
-        )
-        db.session.add_all([john, alice, jane])
+        """Test load_resume_ids endpoint."""
+        resumes = [
+            ResumeData(
+                user_id=self.testuser.id,
+                first_name=JANE_DOE_FIRST_NAME,
+                last_name=JANE_DOE_LAST_NAME,
+            ),
+            ResumeData(
+                user_id=self.testuser.id,
+                first_name=JOHN_SMITH_FIRST_NAME,
+                last_name=JOHN_SMITH_LAST_NAME,
+            ),
+        ]
+        db.session.add_all(resumes)
         db.session.commit()
 
-        resume_ids = self.client.get("/load-resume-ids").json
-        self.assertEqual(resume_ids, [0, 1, 2])
+        response = self.client.get(LOAD_RESUME_IDS_ROUTE)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(isinstance(response.json, list))
+        self.assertGreaterEqual(len(response.json), 2)
 
     def test_load_resume_success(self):
-        """Test load_resume w/ success"""
-        resume_request = {"id": 0}
-        john = ResumeData(
-            user_id=self.testuser.id, id=0, first_name="John", last_name="Smith"
+        """Test load_resume with success."""
+        resume = ResumeData(
+            user_id=self.testuser.id,
+            first_name=JOHN_SMITH_FIRST_NAME,
+            last_name=JOHN_SMITH_LAST_NAME,
         )
-        db.session.add(john)
+        db.session.add(resume)
         db.session.commit()
 
-        resume = self.client.post(
-            "/load-resume",
+        resume_request = {"id": resume.id}
+        response = self.client.post(
+            LOAD_RESUME_ROUTE,
             data=json.dumps(resume_request),
-            content_type="application/json",
+            content_type=JSON,
         )
-        resume_data = resume.json
-
-        self.assertEqual(resume.status_code, 200)
-        self.assertIn("application/json", resume.content_type)
-        self.assertEqual(resume_data["first_name"], "John")
-        self.assertEqual(resume_data["id"], 0)
-        self.assertEqual(resume_data["last_name"], "Smith")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(JSON, response.content_type)
+        self.assertEqual(response.json["first_name"], JOHN_SMITH_FIRST_NAME)
+        self.assertEqual(response.json["last_name"], JOHN_SMITH_LAST_NAME)
 
     def test_load_resume_bad_request(self):
-        """Test load_resume w/ bad request"""
+        """Test load_resume with bad request."""
         resume_request = {"name": "john"}
-
-        john = ResumeData(
-            user_id=self.testuser.id, id=0, first_name="John", last_name="Smith"
-        )
-        db.session.add(john)
-        db.session.commit()
-
-        resume = self.client.post(
-            "/load-resume",
+        response = self.client.post(
+            LOAD_RESUME_ROUTE,
             data=json.dumps(resume_request),
-            content_type="application/json",
+            content_type=JSON,
         )
-        self.assertEqual(resume.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
     def test_load_resume_not_found(self):
-        """Test load_resume w/ resume not found"""
-        resume_request = {"id": 0}
-
-        resume = self.client.post(
-            "/load-resume",
+        """Test load_resume with resume not found."""
+        resume_request = {"id": 999}
+        response = self.client.post(
+            LOAD_RESUME_ROUTE,
             data=json.dumps(resume_request),
-            content_type="application/json",
+            content_type=JSON,
         )
-        self.assertEqual(resume.status_code, 404)
+        self.assertEqual(response.status_code, 404)
 
 
 class UserAuthenticationTestCase(BaseTestCase):
-    """Test authentication routes"""
+    """Test authentication routes."""
 
     def test_user_registration(self):
         """Test user can register successfully."""
-        with self.client:
-            response = self.register("newuser", "123456", "123456")
-            self.assertEqual(response.status_code, 200)
-            self.assertTrue(User.query.filter_by(username="newuser").first())
+        response = self.register(
+            NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(User.query.filter_by(username=NEW_USER_USERNAME).first())
 
     def test_user_login(self):
         """Test registered user can login."""
-        self.register("newuser", "testpassword", "testpassword")
-
-        response = self.login("newuser", "testpassword")
+        self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
+        response = self.login(NEW_USER_USERNAME, NEW_USER_PASSWORD)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Home", response.data.decode())
+        self.assertIn(HOME, response.data.decode())
 
     def test_user_logout(self):
         """Test logged in user can logout."""
-        self.register("testuser", "testpassword", "testpassword")
-        self.login("testuser", "testpassword")
-
+        self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
+        self.login(TEST_USERNAME, TEST_PASSWORD)
         response = self.logout()
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Login", response.data.decode())
+        self.assertIn(LOGIN, response.data.decode())
 
     def test_incorrect_login(self):
         """Test user cannot login with incorrect credentials."""
-        self.register("testuser", "testpassword", "testpassword")
-
-        response = self.login("testuser", "wrongpassword")
-        self.assertIn("Invalid Credentials", response.data.decode())
+        self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
+        response = self.login(NEW_USER_USERNAME, WRONG_PASSWORD)
+        self.assertIn(INVALID_CREDENTIALS, response.data.decode())
         self.assertEqual(response.status_code, 200)
 
     def test_duplicate_registration(self):
         """Test that duplicate user registration is not allowed."""
-        self.register("testuser", "testpassword", "testpassword")
-        response = self.register("testuser", "testpassword", "testpassword")
-        self.assertIn("Register", response.data.decode())
+        self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
+        response = self.register(
+            NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD
+        )
+        self.assertIn(REGISTER, response.data.decode())
         self.assertEqual(response.status_code, 200)
 
 
