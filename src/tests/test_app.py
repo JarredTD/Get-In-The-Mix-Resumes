@@ -7,32 +7,39 @@ from app import create_app, db
 from app.config import TestingConfig
 from app.scripts.models import ResumeData, User
 
-# Constants for user credentials and test data
 TEST_USERNAME = "testuser"
 TEST_PASSWORD = "test"
+
 NEW_USER_USERNAME = "newuser"
 NEW_USER_PASSWORD = "123456"
+
 CONFIRM_PASSWORD = "123456"
 WRONG_PASSWORD = "wrongpassword"
+
 JANE_DOE_FIRST_NAME = "Jane"
 JANE_DOE_LAST_NAME = "Doe"
+
 JOHN_SMITH_FIRST_NAME = "John"
 JOHN_SMITH_LAST_NAME = "Smith"
+
 ALICE_FIRST_NAME = "Alice"
 ALICE_LAST_NAME = "Wonderland"
+
 ALICIA_FIRST_NAME = "Alicia"
+
 BOB_FIRST_NAME = "Bob"
 BOB_LAST_NAME = "Builder"
+
 HOME = "Home"
 ABOUT_US = "About Us"
 PROJECT_MOTIVATION = "Project Motivation"
 LOGIN = "Login"
 REGISTER = "Register"
-INVALID_CREDENTIALS = "Invalid Credentials"
 JSON = "application/json"
-DB_CONNECTED = "Database is connected"
 
-# Constants for routes
+DB_CONNECTED = "Database is connected"
+INVALID_CREDENTIALS = "Invalid Credentials"
+
 LOGIN_ROUTE = "/login"
 REGISTER_ROUTE = "/register"
 LOGOUT_ROUTE = "/logout"
