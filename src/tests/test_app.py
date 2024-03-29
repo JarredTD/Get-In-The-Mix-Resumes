@@ -30,6 +30,7 @@ LOGIN = "Login"
 REGISTER = "Register"
 INVALID_CREDENTIALS = "Invalid Credentials"
 JSON = "application/json"
+DB_CONNECTED = "Database is connected"
 
 # Constants for routes
 LOGIN_ROUTE = "/login"
@@ -114,7 +115,19 @@ class FlaskRoutingTestCase(BaseTestCase):
         """Test the test-db route."""
         response = self.client.get(TEST_DB_ROUTE)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Database is connected", response.data.decode())
+        self.assertIn(DB_CONNECTED, response.data.decode())
+
+    def test_login_route(self):
+        """Test the test-db route."""
+        response = self.client.get(LOGIN_ROUTE)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(LOGIN, response.data.decode())
+
+    def test_register_route(self):
+        """Test the test-db route."""
+        response = self.client.get(REGISTER_ROUTE)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(REGISTER, response.data.decode())
 
 
 class ResumeDataModelTestCase(BaseTestCase):
