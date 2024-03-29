@@ -36,6 +36,7 @@ DB_CONNECTED = "Database is connected"
 LOGIN_ROUTE = "/login"
 REGISTER_ROUTE = "/register"
 LOGOUT_ROUTE = "/logout"
+INDEX_ROUTE = "/"
 ABOUT_US_ROUTE = "/about-us"
 PROJECT_MOTIVATION_ROUTE = "/project-motivation"
 TEST_DB_ROUTE = "/test-db"
@@ -95,7 +96,8 @@ class FlaskRoutingTestCase(BaseTestCase):
 
     def test_index_route(self):
         """Test the index page route after logging in."""
-        response = self.login(TEST_USERNAME, TEST_PASSWORD)
+        self.login(TEST_USERNAME, TEST_PASSWORD)
+        response = self.client.get(INDEX_ROUTE)
         self.assertEqual(response.status_code, 200)
         self.assertIn(HOME, response.data.decode())
 
