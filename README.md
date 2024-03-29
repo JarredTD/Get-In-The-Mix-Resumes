@@ -9,6 +9,13 @@
 
 Get-In-The-Mix-Resumes is a tool designed to simplify and enhance the process of creating and managing resumes. It provides an intuitive way to compile professional resumes.
 
+## Team
+
+- Evan Phillips
+  - Email
+- Jarred Desrosiers
+  - desrosiersj20@students.ecu.edu
+
 ## Self Hosting
 
 ### Prerequisites
