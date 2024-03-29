@@ -283,6 +283,24 @@ class UserAuthenticationTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(User.query.filter_by(username=NEW_USER_USERNAME).first())
 
+    def test_user_login_with_next_parameter(self):
+        """
+        Test registered user can login and is redirected according
+        to 'next' parameter.
+        """
+        self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
+
+        next_url = "ht://d"  # Invalid next
+
+        login_url = f"/login?next={next_url}"
+        response = self.client.post(
+            login_url,
+            data={"username": NEW_USER_USERNAME, "password": NEW_USER_PASSWORD},
+            follow_redirects=False,
+        )
+
+        self.assertEqual(response.status_code, 400, "Expected abort")
+
     def test_user_login(self):
         """Test registered user can login."""
         self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
