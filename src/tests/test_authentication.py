@@ -14,6 +14,8 @@ LOGIN = "Login"
 HOME = "Home"
 REGISTER = "Register"
 INVALID_CREDENTIALS = "Invalid Credentials"
+INVALID_NEXT = "ht://d"
+INVALID_LOGIN = f"?next={INVALID_NEXT}"
 
 
 class UserAuthenticationTestCase(BaseTestCase):
@@ -34,12 +36,10 @@ class UserAuthenticationTestCase(BaseTestCase):
         """
         self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
 
-        next_url = "ht://d"  # Invalid next
-
-        login_url = f"/login?next={next_url}"
-        response = self.client.post(
-            login_url,
-            data={"username": NEW_USER_USERNAME, "password": NEW_USER_PASSWORD},
+        response = self.login(
+            NEW_USER_USERNAME,
+            NEW_USER_PASSWORD,
+            route_append=INVALID_LOGIN,
             follow_redirects=False,
         )
 

@@ -39,24 +39,31 @@ class BaseTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def login(self, username, password):
+    def login(self, username, password, route_append="", follow_redirects=True):
         """Helper method to log in as a user."""
         return self.client.post(
-            LOGIN_ROUTE,
+            LOGIN_ROUTE + route_append,
             data={"username": username, "password": password},
-            follow_redirects=True,
+            follow_redirects=follow_redirects,
         )
 
-    def register(self, username, password, confirm_password):
+    def register(
+        self,
+        username,
+        password,
+        confirm_password,
+        route_append="",
+        follow_redirects=True,
+    ):
         """Helper method to register a new user."""
         return self.client.post(
-            REGISTER_ROUTE,
+            REGISTER_ROUTE + route_append,
             data={
                 "username": username,
                 "password": password,
                 "confirm_password": confirm_password,
             },
-            follow_redirects=True,
+            follow_redirects=follow_redirects,
         )
 
     def logout(self):
