@@ -1,7 +1,7 @@
 Flask Application Tests
 =======================
 
-.. automodule:: tests.test_app
+.. automodule:: tests
    :members:
    :undoc-members:
    :show-inheritance:
