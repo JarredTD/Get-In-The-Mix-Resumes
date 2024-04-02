@@ -3,14 +3,8 @@
 # pylint: disable=no-name-in-module
 
 import json
-from app import db
-from app.scripts.models import ResumeData
 from tests import BaseTestCase
 
-JANE_DOE_FIRST_NAME = "Jane"
-JANE_DOE_LAST_NAME = "Doe"
-JOHN_SMITH_FIRST_NAME = "John"
-JOHN_SMITH_LAST_NAME = "Smith"
 LOAD_RESUME_IDS_ROUTE = "/load-resume-ids"
 LOAD_RESUME_ROUTE = "/load-resume"
 JSON = "application/json"
@@ -21,20 +15,8 @@ class ResumeEndpointTestCase(BaseTestCase):
 
     def test_load_resume_ids(self):
         """Test load_resume_ids endpoint."""
-        resumes = [
-            ResumeData(
-                user_id=self.testuser.id,
-                first_name=JANE_DOE_FIRST_NAME,
-                last_name=JANE_DOE_LAST_NAME,
-            ),
-            ResumeData(
-                user_id=self.testuser.id,
-                first_name=JOHN_SMITH_FIRST_NAME,
-                last_name=JOHN_SMITH_LAST_NAME,
-            ),
-        ]
-        db.session.add_all(resumes)
-        db.session.commit()
+        self.create_resume_data()
+        self.create_resume_data()
 
         response = self.client.get(LOAD_RESUME_IDS_ROUTE)
         self.assertEqual(response.status_code, 200)
@@ -42,14 +24,14 @@ class ResumeEndpointTestCase(BaseTestCase):
         self.assertGreaterEqual(len(response.json), 2)
 
     def test_load_resume_success(self):
-        """Test load_resume with success."""
-        resume = ResumeData(
-            user_id=self.testuser.id,
-            first_name=JOHN_SMITH_FIRST_NAME,
-            last_name=JOHN_SMITH_LAST_NAME,
-        )
-        db.session.add(resume)
-        db.session.commit()
+        """Test load_resume with success, ensuring related models are included."""
+        resume = self.create_resume_data()
+        self.create_experience(resume.id)
+        self.create_education(resume.id)
+        self.create_extracurricular(resume.id)
+        self.create_project(resume.id)
+        self.create_skill(resume.id)
+        self.create_course(resume.id)
 
         resume_request = {"id": resume.id}
         response = self.client.post(
@@ -57,10 +39,21 @@ class ResumeEndpointTestCase(BaseTestCase):
             data=json.dumps(resume_request),
             content_type=JSON,
         )
+
         self.assertEqual(response.status_code, 200)
         self.assertIn(JSON, response.content_type)
-        self.assertEqual(response.json["first_name"], JOHN_SMITH_FIRST_NAME)
-        self.assertEqual(response.json["last_name"], JOHN_SMITH_LAST_NAME)
+
+        # Construct the expected subset for the primary resume data
+        expected_subset = {
+            "first_name": resume.first_name,
+            "last_name": resume.last_name,
+            "email": resume.email,
+            # Add more fields from resume_template if necessary
+        }
+
+        self.assert_dict_contains_subset(
+            expected_subset, response.json, "Resume data does not match."
+        )
 
     def test_load_resume_bad_request(self):
         """Test load_resume with bad request."""

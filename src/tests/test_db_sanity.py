@@ -6,78 +6,68 @@ from app import db
 from app.scripts.models import ResumeData
 from tests import BaseTestCase
 
-JANE_DOE_FIRST_NAME = "Jane"
-JANE_DOE_LAST_NAME = "Doe"
-JOHN_SMITH_FIRST_NAME = "John"
-JOHN_SMITH_LAST_NAME = "Smith"
-ALICE_FIRST_NAME = "Alice"
-ALICE_LAST_NAME = "Wonderland"
-ALICIA_FIRST_NAME = "Alicia"
-BOB_FIRST_NAME = "Bob"
-BOB_LAST_NAME = "Builder"
-
 
 class ResumeDataModelTestCase(BaseTestCase):
     """Test the ResumeData model operations."""
 
     def test_resume_data_creation(self):
-        """Sanity check on adding a record."""
-        resume = ResumeData(
-            user_id=self.testuser.id,
-            first_name=JANE_DOE_FIRST_NAME,
-            last_name=JANE_DOE_LAST_NAME,
-        )
-        db.session.add(resume)
-        db.session.commit()
+        """Sanity check on adding a ResumeData record."""
+        self.create_resume_data()
 
-        created = ResumeData.query.filter_by(first_name=JANE_DOE_FIRST_NAME).first()
-        self.assertIsNotNone(created)
-        self.assertEqual(created.first_name, JANE_DOE_FIRST_NAME)
-        self.assertEqual(created.last_name, JANE_DOE_LAST_NAME)
+        created = ResumeData.query.filter_by(
+            email=self.complete_resume_template["email"]
+        ).first()
+        self.assertIsNotNone(created, "ResumeData instance should have been created.")
+
+        expected_dict = self.complete_resume_template.copy()
+        expected_dict["id"] = created.id
+        expected_dict["entry_date"] = (
+            created.entry_date.isoformat()
+        )  # Format datetime for comparison
+
+        self.assert_dict_contains_subset(
+            expected_dict, created.to_dict(), "Created data does not match template."
+        )
 
     def test_resume_data_retrieval(self):
-        """Sanity check on retrieving a record."""
-        resume = ResumeData(
-            user_id=self.testuser.id,
-            first_name=JOHN_SMITH_FIRST_NAME,
-            last_name=JOHN_SMITH_LAST_NAME,
-        )
-        db.session.add(resume)
-        db.session.commit()
+        """Sanity check on retrieving a ResumeData record."""
+        created = self.create_resume_data()
 
-        retrieved = ResumeData.query.filter_by(first_name=JOHN_SMITH_FIRST_NAME).first()
-        self.assertIsNotNone(retrieved)
-        self.assertEqual(retrieved.first_name, JOHN_SMITH_FIRST_NAME)
-        self.assertEqual(retrieved.last_name, JOHN_SMITH_LAST_NAME)
+        retrieved = ResumeData.query.get(created.id)
+        self.assertIsNotNone(retrieved, "Failed to retrieve the ResumeData record.")
+
+        expected_dict = self.complete_resume_template.copy()
+        expected_dict["id"] = retrieved.id
+        expected_dict["entry_date"] = retrieved.entry_date.isoformat()
+
+        self.assert_dict_contains_subset(
+            expected_dict,
+            retrieved.to_dict(),
+            "Retrieved data does not match template.",
+        )
 
     def test_resume_data_update(self):
-        """Sanity check on updating a record."""
-        resume = ResumeData(
-            user_id=self.testuser.id,
-            first_name=ALICE_FIRST_NAME,
-            last_name=ALICE_LAST_NAME,
+        """Sanity check on updating a ResumeData record."""
+        created_resume = self.create_resume_data()
+
+        updated_first_name = "Updated"
+        created_resume.first_name = updated_first_name
+        db.session.commit()
+
+        updated = ResumeData.query.get(created_resume.id)
+        updated_dict = updated.to_dict()
+        self.assertEqual(
+            updated_dict["first_name"],
+            updated_first_name,
+            "ResumeData first name was not updated correctly.",
         )
-        db.session.add(resume)
-        db.session.commit()
-
-        to_update = ResumeData.query.filter_by(first_name=ALICE_FIRST_NAME).first()
-        to_update.first_name = ALICIA_FIRST_NAME
-        db.session.commit()
-
-        updated = ResumeData.query.filter_by(id=to_update.id).first()
-        self.assertEqual(updated.first_name, ALICIA_FIRST_NAME)
 
     def test_resume_data_deletion(self):
-        """Sanity check on deleting a record."""
-        resume = ResumeData(
-            user_id=self.testuser.id, first_name=BOB_FIRST_NAME, last_name=BOB_LAST_NAME
-        )
-        db.session.add(resume)
+        """Sanity check on deleting a ResumeData record."""
+        resume_to_delete = self.create_resume_data()
+
+        db.session.delete(resume_to_delete)
         db.session.commit()
 
-        to_delete = ResumeData.query.filter_by(first_name=BOB_FIRST_NAME).first()
-        db.session.delete(to_delete)
-        db.session.commit()
-
-        deleted = ResumeData.query.filter_by(id=to_delete.id).first()
-        self.assertIsNone(deleted)
+        deleted = ResumeData.query.get(resume_to_delete.id)
+        self.assertIsNone(deleted, "ResumeData record was not deleted.")
