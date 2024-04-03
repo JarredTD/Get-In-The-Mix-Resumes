@@ -2,6 +2,19 @@
 Get In The Mix Resumes
 =================================
 
+.. image:: https://github.com/JarredTD/Get-In-The-Mix-Resumes/actions/workflows/main.yml/badge.svg
+    :target: https://github.com/JarredTD/Get-In-The-Mix-Resumes/actions
+
+.. image:: https://coveralls.io/repos/github/JarredTD/Get-In-The-Mix-Resumes/badge.svg?branch=main
+    :target: https://coveralls.io/github/JarredTD/Get-In-The-Mix-Resumes?branch=main
+
+.. image:: https://img.shields.io/badge/linting-pylint-yellowgreen
+    :target: https://github.com/pylint-dev/pylint
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+
+
 Introduction
 ============
 
