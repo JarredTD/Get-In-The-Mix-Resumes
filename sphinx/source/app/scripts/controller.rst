@@ -1,5 +1,5 @@
-Flask Application Controller
-============================
+Controller Documentation
+========================
 
 .. automodule:: app.scripts.controllers
    :members:

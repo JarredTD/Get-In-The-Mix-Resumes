@@ -13,7 +13,7 @@ author = "Jarred & Evan"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "sphinx_autodoc_typehints"]
+extensions = ["sphinx.ext.autodoc", "sphinx_autodoc_typehints", "sphinx.ext.napoleon"]
 
 autodoc_default_options = {
     "member-order": "bysource",

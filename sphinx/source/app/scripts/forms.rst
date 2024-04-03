@@ -1,5 +1,5 @@
-Flask Application Forms
-=========================
+Forms Documentation
+===================
 
 .. automodule:: app.scripts.forms
    :members:
