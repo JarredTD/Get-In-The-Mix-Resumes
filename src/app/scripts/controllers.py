@@ -14,7 +14,7 @@ from flask import (
     url_for,
 )
 from flask.wrappers import Response
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash
 
 from app import db
@@ -39,6 +39,7 @@ def test_db() -> str:
 
 
 @controllers_bp.route("/load-resume-ids", methods=["GET"])
+@login_required
 def load_resume_ids() -> Response:
     """
     Queries all ids found in ResumeData table
@@ -48,6 +49,7 @@ def load_resume_ids() -> Response:
     """
     ids = (
         ResumeData.query.with_entities(ResumeData.id)
+        .filter_by(user_id=current_user.id)
         .order_by(ResumeData.entry_date)
         .all()
     )
@@ -56,6 +58,7 @@ def load_resume_ids() -> Response:
 
 
 @controllers_bp.route("/load-resume", methods=["POST"])
+@login_required
 def load_resume() -> Union[Response, tuple]:
     """
     Queries for a specific resume in the ResumeData table
@@ -70,7 +73,11 @@ def load_resume() -> Union[Response, tuple]:
     if resume_id is None:
         return jsonify({"error": "Missing ID"}), 400
 
-    resume = ResumeData.query.filter_by(id=resume_id).first()
+    resume = (
+        ResumeData.query.filter_by(user_id=current_user.id)
+        .filter_by(id=resume_id)
+        .first()
+    )
 
     if resume is None:
         return jsonify({"error": "No Resume Found"}), 404

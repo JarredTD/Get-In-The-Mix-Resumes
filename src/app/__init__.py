@@ -34,7 +34,7 @@ def create_app(config_class=DevelopmentConfig):
 
         @login_manager.user_loader
         def load_user(user_id):
-            return models.User.query.get(int(user_id))
+            return models.User.query.get(user_id)
 
         app.register_blueprint(views_bp)
         app.register_blueprint(controllers_bp)
