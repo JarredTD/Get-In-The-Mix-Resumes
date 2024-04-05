@@ -8,7 +8,7 @@ TEST_USERNAME = "testuser"
 TEST_PASSWORD = "test"
 HOME = "Home"
 INDEX_ROUTE = "/"
-ABOUT_US = "About Us"
+ABOUT_US_CHECK = "All About Me"
 ABOUT_US_ROUTE = "/about-us"
 PROJECT_MOTIVATION_ROUTE = "/project-motivation"
 PROJECT_MOTIVATION = "Project Motivation"
@@ -34,7 +34,7 @@ class FlaskRoutingTestCase(BaseTestCase):
         """Test the about us page route."""
         response = self.client.get(ABOUT_US_ROUTE)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(ABOUT_US, response.data.decode())
+        self.assertIn(ABOUT_US_CHECK, response.data.decode())
 
     def test_project_motivation_route(self):
         """Test the project motivation page route."""
