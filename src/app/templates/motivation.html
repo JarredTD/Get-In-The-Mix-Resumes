@@ -1,16 +1,107 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Project Motivation</title>
-    </script>
-</head>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-<body>
-    <p>Project Motivation</p>
-</body>
+    <body>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="/">Get In The Mix Resumes</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about-us">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-motivation"
+                            >Project Motivation</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
+    <style>
+      .circle-heading {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        color: white;
+        background-color:rgb(0, 125, 214);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+      }
+
+      .section {
+        padding: 75px 0;
+      }
+
+      .heading-col {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .description-col {
+        display: flex;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row section">
+        <div class="col-md-6 heading-col">
+          <div class="circle-heading">Who</div>
+        </div>
+        <div class="col-md-6 description-col">
+          <p>
+            People who are looking for jobs but are unsure of how, or what to
+            do.
+          </p>
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="col-md-6 order-md-2 heading-col">
+          <div class="circle-heading">What</div>
+        </div>
+        <div class="col-md-6 order-md-1 description-col">
+          <p>Description of What this project is...</p>
+        </div>
+      </div>
+
+      <div class="row section">
+        <div class="col-md-6 heading-col">
+          <div class="circle-heading">Why</div>
+        </div>
+        <div class="col-md-6 description-col">
+          <p>Description of Why this project exists...</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
 </html>
