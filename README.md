@@ -12,7 +12,7 @@ Get-In-The-Mix-Resumes is a tool designed to simplify and enhance the process of
 ## Team
 
 - Evan Phillips
-  - Email
+  - phillipsev20@students.ecu.edu
 - Jarred Desrosiers
   - desrosiersj20@students.ecu.edu
 
