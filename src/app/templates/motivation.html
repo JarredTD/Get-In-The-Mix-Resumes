@@ -8,56 +8,82 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      .who-section {
-        background-color: #add8e6; /* Light blue background for "Who" */
-      }
-
-      .what-section {
-        background-color: #ffb6c1; /* Light pink background for "What" */
-      }
-
+      .who-section,
+      .what-section,
       .why-section {
-        background-color: #90ee90; /* Light green background for "Why" */
+        background-color: #1fbbef; /* Adjusted background color */
       }
 
       .section {
-        padding: 120px 0; /* Increase vertical padding for thicker sections */
+        padding: 340px 0; /* Adjusted padding for section */
+        border: 2px solid white;
       }
 
       .heading-col,
       .description-col {
         display: flex;
         align-items: center;
-        justify-content: center; /* Center content for better alignment */
+        justify-content: center;
+      }
+
+      /* Adjusted navigation bar and links to use the Roboto font */
+      .navbar,
+      .navbar-brand,
+      .nav-link {
+        font-family: "Roboto", sans-serif;
       }
 
       .heading-col h2,
       .description-col p {
-        margin: 0; /* Remove default margins to allow for full-width stretching */
-        padding: 0 15px; /* Add padding inside the text elements for spacing */
+        margin: 0;
+        padding: 0 15px;
         color: white; /* Ensures text is visible on colored backgrounds */
+        font-family: "Playfair Display", serif; /* Apply Playfair Display font */
       }
 
-      /* New style for the circular background on headings */
+      .description-col p {
+        font-size: 50px; /* Adjusted paragraph font size */
+      }
+
       .heading-circle {
-        display: inline-block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border-radius: 50%;
-        padding: 10px 20px;
-        color: white;
+        overflow: hidden; /* Ensure images are clipped to the circle */
+        width: 200px; /* Control circle size here */
+        height: 200px; /* Ensure this matches the width for a perfect circle */
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
       }
 
-      /* Darker shade backgrounds for each section heading */
+      .heading-col {
+        position: relative;
+        flex: 1;
+        min-height: 120px; /* Adjusted minimum height to ensure adequate space */
+      }
+
       .who-heading {
-        background-color: #007cba; /* Darker blue */
+        background-color: #483d8c;
       }
 
       .what-heading {
-        background-color: #ff6384; /* Darker pink */
+        background-color: darkred;
       }
 
       .why-heading {
-        background-color: #32cd32; /* Darker green */
+        background-color: darkgreen;
       }
 
       .container-fluid {
@@ -69,37 +95,41 @@
   <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/">Get In The Mix Resumes</a>
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/about-us">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/project-motivation"
-                        >Project Motivation</a
-                    >
-                </li>
-            </ul>
-        </div>
+      <a class="navbar-brand" href="/">Get In The Mix Resumes</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/about-us">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/project-motivation"
+              >Project Motivation</a
+            >
+          </li>
+        </ul>
+      </div>
     </nav>
-  <body>
     <div class="container-fluid">
       <div class="row section who-section">
         <div class="col-6 heading-col">
-          <h2><span class="heading-circle who-heading">Who</span></h2>
-        </div>
+          <!-- Updated WHO circle with an image
+          <img
+            src="path/to/your-who-image.svg"
+            alt="Who"
+            class="heading-circle who-heading"
+          />
+        --></div>
         <div class="col-6 description-col">
           <p>
             People who are looking for jobs but are unsure of how, or what to
@@ -110,8 +140,13 @@
 
       <div class="row section what-section">
         <div class="col-6 order-md-2 heading-col">
-          <h2><span class="heading-circle what-heading">What</span></h2>
-        </div>
+          <!-- Updated WHAT circle with an image
+          <img
+            src="path/to/your-what-image.svg"
+            alt="What"
+            class="heading-circle what-heading"
+          />
+        --></div>
         <div class="col-6 order-md-1 description-col">
           <p>Description of What this project is...</p>
         </div>
@@ -119,8 +154,14 @@
 
       <div class="row section why-section">
         <div class="col-6 heading-col">
-          <h2><span class="heading-circle why-heading">Why</span></h2>
-        </div>
+          <!-- Updated WHY circle with an image
+          <img
+            
+            src="path/to/your-why-image.svg"
+            alt="Why"
+            class="heading-circle why-heading"
+          />
+        --></div>
         <div class="col-6 description-col">
           <p>Description of Why this project exists...</p>
         </div>
