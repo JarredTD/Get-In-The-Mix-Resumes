@@ -26,13 +26,18 @@
       .section {
         padding: 340px 0; /* Adjusted padding for section */
         border: 2px solid white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .heading-col,
       .description-col {
+        flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
+        text-align: center; /* Center text for better alignment */
       }
 
       /* Adjusted navigation bar and links to use the Roboto font */
@@ -59,9 +64,9 @@
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        overflow: hidden; /* Ensure images are clipped to the circle */
-        width: 200px; /* Control circle size here */
-        height: 200px; /* Ensure this matches the width for a perfect circle */
+        padding: 250px; /* Adjusted padding for a larger circle */
+        font-size: 100px; /* Adjusted font size within circle */
+        color: white;
         position: absolute;
         transform: translate(-50%, -50%);
         top: 50%;
@@ -121,49 +126,63 @@
       </div>
     </nav>
     <div class="container-fluid">
+      <!-- What Section -->
       <div class="row section who-section">
         <div class="col-6 heading-col">
-          <!-- Updated WHO circle with an image
-          <img
-            src="path/to/your-who-image.svg"
-            alt="Who"
-            class="heading-circle who-heading"
-          />
-        --></div>
+          <h2><span class="heading-circle who-heading">What</span></h2>
+        </div>
         <div class="col-6 description-col">
           <p>
-            People who are looking for jobs but are unsure of how, or what to
-            do.
+            A resume builder designed to assist those unsure of how to begin
+            their job application journey.
           </p>
+          <!-- Add your image below the paragraph for the What section
+          <img
+            src="path/to/your-image-for-what-section.jpg"
+            alt="Image description for What"
+            style="max-width: 100%; height: auto"
+          />
+          -->
         </div>
       </div>
 
+      <!-- Who Section -->
       <div class="row section what-section">
         <div class="col-6 order-md-2 heading-col">
-          <!-- Updated WHAT circle with an image
-          <img
-            src="path/to/your-what-image.svg"
-            alt="What"
-            class="heading-circle what-heading"
-          />
-        --></div>
+          <h2><span class="heading-circle what-heading">Who</span></h2>
+        </div>
         <div class="col-6 order-md-1 description-col">
-          <p>Description of What this project is...</p>
+          <p>
+            For individuals in search of employment but uncertain of the steps
+            or actions to take, we offer guidance and support.
+          </p>
+          <!-- Add your image below the paragraph for the Who section 
+          <img
+            src="path/to/your-image-for-who-section.jpg"
+            alt="Image description for Who"
+            style="max-width: 100%; height: auto"
+          />
+          -->
         </div>
       </div>
 
+      <!-- Why Section -->
       <div class="row section why-section">
         <div class="col-6 heading-col">
-          <!-- Updated WHY circle with an image
-          <img
-            
-            src="path/to/your-why-image.svg"
-            alt="Why"
-            class="heading-circle why-heading"
-          />
-        --></div>
+          <h2><span class="heading-circle why-heading">Why</span></h2>
+        </div>
         <div class="col-6 description-col">
-          <p>Description of Why this project exists...</p>
+          <p>
+            We are committed to empowering individuals to secure interviews and
+            successfully land their dream jobs.
+          </p>
+          <!-- Add your image below the paragraph for the Why section 
+          <img
+            src="path/to/your-image-for-why-section.jpg"
+            alt="Image description for Why"
+            style="max-width: 100%; height: auto"
+          />
+          -->
         </div>
       </div>
     </div>
