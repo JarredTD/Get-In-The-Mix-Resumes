@@ -7,43 +7,88 @@
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #1fbbef; /* Light blue background */
+        margin: 0; /* Removes default margin */
+        color: white; /* Sets text color to white */
+        font-family: "Roboto", sans-serif; /* Sets the font family to Roboto for body text */
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Playfair Display", serif; /* Sets the font family to Playfair Display for headings */
+      }
+      .full-height {
+        height: 100vh; /* Sets the height of the row to full viewport height */
+        display: flex;
+        align-items: center; /* Centers content vertically */
+        justify-content: center; /* Centers content horizontally */
+        position: relative; /* Needed for absolute positioning of pseudo-elements */
+      }
+      .full-height:first-child::after {
+        content: ""; /* Required for pseudo-elements */
+        position: absolute;
+        bottom: 0; /* Aligns the pseudo-element at the bottom of the row */
+        left: 0;
+        width: 100%; /* Ensures the line spans the full width of the row */
+        border-bottom: 2px solid white; /* Creates the white line */
+      }
+      .img-full-right {
+        padding-left: 0; /* Removes padding on the left of the image for full width usage */
+      }
+      .container-fluid {
+        padding: 0 5%; /* Adds horizontal padding */
+      }
+    </style>
   </head>
 
   <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/">Get In The Mix Resumes</a>
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/about-us">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/project-motivation"
-                        >Project Motivation</a
-                    >
-                </li>
-            </ul>
-        </div>
+      <a class="navbar-brand" href="/">Get In The Mix Resumes</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/about-us">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/project-motivation"
+              >Project Motivation</a
+            >
+          </li>
+        </ul>
+      </div>
     </nav>
-    
-  <body>
-    <div class="container py-5">
+
+    <div class="container-fluid p-0">
       <!-- Row 1: Picture on the left, text on the right -->
-      <div class="row align-items-center mb-5">
+      <div class="row full-height">
         <div class="col-md-6">
           <img
             src="your-image-url-here.jpg"
@@ -62,21 +107,22 @@
       </div>
 
       <!-- Row 2: Text on the left, picture on the right -->
-      <div class="row align-items-center">
-        <div class="col-md-6 order-md-2">
-          <img
-            src="another-image-url-here.jpg"
-            class="img-fluid"
-            alt="Another Aspect of Your Life"
-          />
-        </div>
-        <div class="col-md-6 order-md-1">
+      <div class="row full-height">
+        <div class="col-md-6">
           <h2>Another Aspect of Your Life</h2>
           <p>
             More details about you. This could focus on professional
             achievements, personal milestones, or any other aspects of your life
             you find noteworthy.
           </p>
+        </div>
+        <div class="col-md-6 img-full-right">
+          <img
+            src="another-image-url-here.jpg"
+            class="img-fluid"
+            alt="Another Aspect of Your Life"
+            style="width: 100%"
+          />
         </div>
       </div>
     </div>
