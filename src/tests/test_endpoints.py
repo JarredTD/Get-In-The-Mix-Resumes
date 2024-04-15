@@ -39,51 +39,40 @@ class ResumeEndpointTestCase(BaseTestCase):
         self.create_course(resume.id)
         self.login(TEST_USERNAME, TEST_PASSWORD)
 
-        resume_request = {"id": resume.id}
-        response = self.client.post(
-            LOAD_RESUME_ROUTE,
-            data=json.dumps(resume_request),
+        response = self.client.get(
+            f"{LOAD_RESUME_ROUTE}/{resume.id}",
             content_type=JSON,
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(JSON, response.content_type)
 
-        self.assert_dict_contains_subset(
-            resume.to_dict(), response.json, "Resume data does not match."
-        )
-
-    def test_load_resume_bad_request(self):
-        """Test load_resume with bad request."""
-        self.login(TEST_USERNAME, TEST_PASSWORD)
-        resume_request = {"name": "john"}
-        response = self.client.post(
-            LOAD_RESUME_ROUTE,
-            data=json.dumps(resume_request),
-            content_type=JSON,
-        )
-        self.assertEqual(response.status_code, 400)
+        expected_resume = resume.to_dict()
+        actual_response = response.get_json()
+        for key, value in expected_resume.items():
+            self.assertEqual(
+                actual_response.get(key),
+                value,
+                f"Resume data for {key} does not match.",
+            )
 
     def test_load_resume_not_found(self):
         """Test load_resume with resume not found."""
         self.login(TEST_USERNAME, TEST_PASSWORD)
-        resume_request = {"id": 999}
-        response = self.client.post(
-            LOAD_RESUME_ROUTE,
-            data=json.dumps(resume_request),
+        response = self.client.get(
+            f"{LOAD_RESUME_ROUTE}/999",  # Unlikely to exist
             content_type=JSON,
         )
         self.assertEqual(response.status_code, 404)
 
     def test_load_resume_wrong_user(self):
-        """Test load_resume with resume not found."""
+        """Test load_resume with resume not accessible by the logged-in user."""
         resume = self.create_resume_data()
         self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
         self.login(NEW_USER_USERNAME, NEW_USER_PASSWORD)
-        resume_request = {"id": resume.id}
-        response = self.client.post(
-            LOAD_RESUME_ROUTE,
-            data=json.dumps(resume_request),
+
+        response = self.client.get(
+            f"{LOAD_RESUME_ROUTE}/{resume.id}",
             content_type=JSON,
         )
         self.assertEqual(response.status_code, 404)

@@ -6,7 +6,7 @@ from tests import BaseTestCase
 
 TEST_USERNAME = "testuser"
 TEST_PASSWORD = "test"
-HOME = "Home"
+HOME = "Resume Form"
 INDEX_ROUTE = "/"
 ABOUT_US_CHECK = "All About Me"
 ABOUT_US_ROUTE = "/about-us"
