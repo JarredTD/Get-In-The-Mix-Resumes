@@ -4,12 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>All About Me</title>
-    <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
-    <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
@@ -20,43 +18,61 @@
     />
     <style>
       body {
-        background-color: #1fbbef; /* Light blue background */
-        margin: 0; /* Removes default margin */
-        color: white; /* Sets text color to white */
-        font-family: "Roboto", sans-serif; /* Sets the font family to Roboto for body text */
+        background-color: #f4f4f9; /* Change background to white */
+        color: #000000; /* Change text color to black */
+        font-family: "Roboto", sans-serif;
+        margin: 0;
       }
+
       h1,
       h2,
       h3,
       h4,
       h5,
       h6 {
-        font-family: "Playfair Display", serif; /* Sets the font family to Playfair Display for headings */
+        font-family: "Playfair Display", serif;
       }
+
       .full-height {
-        height: 100vh; /* Sets the height of the row to full viewport height */
+        height: 100vh;
         display: flex;
-        align-items: center; /* Centers content vertically */
-        justify-content: center; /* Centers content horizontally */
-        position: relative; /* Needed for absolute positioning of pseudo-elements */
+        align-items: center;
+        justify-content: center;
+        position: relative;
       }
+
       .full-height:first-child::after {
-        content: ""; /* Required for pseudo-elements */
+        content: "";
         position: absolute;
-        bottom: 0; /* Aligns the pseudo-element at the bottom of the row */
+        bottom: 0;
         left: 0;
-        width: 100%; /* Ensures the line spans the full width of the row */
-        border-bottom: 2px solid white; /* Creates the white line */
+        width: 100%;
+        border-bottom: 2px solid #000; /* Make border line black */
       }
+
       .img-full-right {
-        padding-left: 0; /* Removes padding on the left of the image for full width usage */
+        padding-left: 0;
       }
+
       .container-fluid {
-        padding: 0 5%; /* Adds horizontal padding */
+        padding: 0 5%;
+      }
+
+      .navbar {
+        background-color: #007bff; /* Bootstrap primary color */
+      }
+
+      .navbar-dark .navbar-brand,
+      .navbar-dark .nav-link {
+        color: #ffffff; /* Ensuring nav links are white */
+      }
+
+      img.img-fluid {
+        width: 100%;
+        height: auto;
       }
     </style>
   </head>
-
   <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -121,7 +137,6 @@
             src="another-image-url-here.jpg"
             class="img-fluid"
             alt="Another Aspect of Your Life"
-            style="width: 100%"
           />
         </div>
       </div>

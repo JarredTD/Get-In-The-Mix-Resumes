@@ -17,18 +17,53 @@
       rel="stylesheet"
     />
     <style>
-      .who-section,
-      .what-section,
-      .why-section {
-        background-color: #1fbbef; /* Adjusted background color */
+      :root {
+        --section-padding: 150px 0; /* Vertical padding for sections */
+        --base-font-size: 50px; /* Base font size for normal text */
+        --heading-font-size: 70px; /* Font size for headings within the circles */
+        --circle-size: 600px; /* Diameter of the circles */
+      }
+
+      body {
+        background-color: #f4f4f9; /* White background */
+        color: #000000; /* Black text color */
+        margin: 0;
+      }
+
+      /* Specific font family for navbar to override the body font setting */
+      .navbar,
+      .navbar-brand,
+      .nav-link {
+        font-family: "Roboto", sans-serif; /* Bootstrap default-like style */
+        color: #ffffff; /* White text for better visibility */
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .description-col,
+      .heading-circle {
+        font-family: "Playfair Display", serif; /* Stylish serif font for content */
       }
 
       .section {
-        padding: 340px 0; /* Adjusted padding for section */
-        border: 2px solid white;
+        padding: var(--section-padding); /* Padding set via CSS variable */
         display: flex;
         justify-content: center;
         align-items: center;
+        border: 2px solid black; /* Border for definition */
+      }
+
+      /* Removing top border for the first section and bottom border for the last section */
+      .section:first-child {
+        border-top: none; /* Remove top border */
+      }
+
+      .section:last-child {
+        border-bottom: none; /* Remove bottom border */
       }
 
       .heading-col,
@@ -37,26 +72,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        text-align: center; /* Center text for better alignment */
-      }
-
-      /* Adjusted navigation bar and links to use the Roboto font */
-      .navbar,
-      .navbar-brand,
-      .nav-link {
-        font-family: "Roboto", sans-serif;
-      }
-
-      .heading-col h2,
-      .description-col p {
-        margin: 0;
-        padding: 0 15px;
-        color: white; /* Ensures text is visible on colored backgrounds */
-        font-family: "Playfair Display", serif; /* Apply Playfair Display font */
-      }
-
-      .description-col p {
-        font-size: 50px; /* Adjusted paragraph font size */
+        text-align: center;
+        padding: 0 20px; /* Padding to prevent text from touching the edges */
+        font-size: var(--base-font-size); /* Font size for normal text */
       }
 
       .heading-circle {
@@ -64,36 +82,37 @@
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        padding: 250px; /* Adjusted padding for a larger circle */
-        font-size: 100px; /* Adjusted font size within circle */
-        color: white;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        top: 50%;
-        left: 50%;
+        font-size: var(
+          --heading-font-size
+        ); /* Font size for text inside circles */
+        color: white; /* White text color */
+        background-color: #cccccc; /* Light grey for visibility */
+        width: var(--circle-size); /* Width set via CSS variable */
+        height: var(--circle-size); /* Height set via CSS variable */
+        position: relative;
+        transition: transform 0.3s ease-in-out; /* Smooth transformation on hover */
       }
 
-      .heading-col {
-        position: relative;
-        flex: 1;
-        min-height: 120px; /* Adjusted minimum height to ensure adequate space */
+      .heading-circle:hover {
+        transform: scale(1.1); /* Enlarge the circle by 10% on hover */
+        cursor: pointer; /* Change cursor to indicate interactivity */
       }
 
       .who-heading {
-        background-color: #483d8c;
+        background-color: #483d8c; /* Dark blue */
       }
 
       .what-heading {
-        background-color: darkred;
+        background-color: darkred; /* Dark red */
       }
 
       .why-heading {
-        background-color: darkgreen;
+        background-color: darkgreen; /* Dark green */
       }
 
       .container-fluid {
-        padding-right: 0;
-        padding-left: 0;
+        padding-right: 1;
+        padding-left: 1;
       }
     </style>
   </head>
@@ -125,6 +144,7 @@
         </ul>
       </div>
     </nav>
+
     <div class="container-fluid">
       <!-- What Section -->
       <div class="row section who-section">
@@ -136,13 +156,6 @@
             A resume builder designed to assist those unsure of how to begin
             their job application journey.
           </p>
-          <!-- Add your image below the paragraph for the What section
-          <img
-            src="path/to/your-image-for-what-section.jpg"
-            alt="Image description for What"
-            style="max-width: 100%; height: auto"
-          />
-          -->
         </div>
       </div>
 
@@ -156,13 +169,6 @@
             For individuals in search of employment but uncertain of the steps
             or actions to take, we offer guidance and support.
           </p>
-          <!-- Add your image below the paragraph for the Who section 
-          <img
-            src="path/to/your-image-for-who-section.jpg"
-            alt="Image description for Who"
-            style="max-width: 100%; height: auto"
-          />
-          -->
         </div>
       </div>
 
@@ -176,13 +182,6 @@
             We are committed to empowering individuals to secure interviews and
             successfully land their dream jobs.
           </p>
-          <!-- Add your image below the paragraph for the Why section 
-          <img
-            src="path/to/your-image-for-why-section.jpg"
-            alt="Image description for Why"
-            style="max-width: 100%; height: auto"
-          />
-          -->
         </div>
       </div>
     </div>
