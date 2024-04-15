@@ -118,6 +118,21 @@ class EducationForm(FlaskForm):
     grad_year = IntegerField("Graduation Year", validators=[DataRequired()])
 
 
+class ExtracurricularForm(FlaskForm):
+    """
+    A form for inputting extracurricular activities details.
+
+    Attributes:
+        name (StringField): The name of the club, organization, or activity. Required.
+        title (StringField): Role or position held in the extracurricular activity. Required.
+        bullet_points (TextAreaField): Descriptive bullet points of responsibilities and achievements. Optional.
+    """
+
+    name = StringField("Name", validators=[DataRequired()])
+    title = StringField("Title", validators=[DataRequired()])
+    bullet_points = TextAreaField("Bullet Points", validators=[Optional()])
+
+
 class ProjectForm(FlaskForm):
     """
     A form for detailing projects.
@@ -207,6 +222,7 @@ class ResumeForm(FlaskForm):
     linkedin_link = StringField("LinkedIn Link", validators=[Optional()])
     experiences = FieldList(FormField(ExperienceForm), min_entries=1)
     educations = FieldList(FormField(EducationForm), min_entries=1)
+    extracurriculars = FieldList(FormField(ExtracurricularForm), min_entries=1)
     projects = FieldList(FormField(ProjectForm), min_entries=1)
     skills = FieldList(FormField(SkillForm), min_entries=1)
     courses = FieldList(FormField(CourseForm), min_entries=1)

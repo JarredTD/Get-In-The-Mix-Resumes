@@ -85,8 +85,8 @@ class ResumeData(db.Model):
         user_id (db.Column): Foreign key linking to the User model.
         first_name (db.Column): The individual's first name.
         last_name (db.Column): The individual's last name.
-        email (db.Column): The individual's email address, must be unique.
-        phone_number (db.Column): The individual's phone number, must be unique.
+        email (db.Column): The individual's email address.
+        phone_number (db.Column): The individual's phone number.
         github_link (db.Column): URL to the individual's GitHub profile.
         linkedin_link (db.Column): URL to the individual's LinkedIn profile.
         entry_date (db.Column): Timestamp of when the resume entry was created.

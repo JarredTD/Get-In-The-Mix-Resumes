@@ -1,21 +1,18 @@
 """Views component of MVC paradigm"""
 
-from flask import Blueprint, render_template
-from flask_login import login_required
+from datetime import datetime
+from flask import Blueprint, render_template, redirect, url_for
+from flask_login import login_required, current_user
+from .forms import ResumeForm
 
 views_bp = Blueprint("views_bp", __name__)
 
 
-@views_bp.route("/")
+@views_bp.route("/", methods=["GET", "POST"])
 @login_required
-def index() -> str:
-    """
-    Serve the main index page.
-
-    :return: The rendered template for the main index page.
-    :rtype: str
-    """
-    return render_template("index.html")
+def index():
+    form = ResumeForm()
+    return render_template("index.html", form=form)
 
 
 @views_bp.route("/about-us")

@@ -58,8 +58,6 @@ def upgrade():
             ["user.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("email"),
-        sa.UniqueConstraint("phone_number"),
     )
     with op.batch_alter_table("resume_data", schema=None) as batch_op:
         batch_op.create_index(

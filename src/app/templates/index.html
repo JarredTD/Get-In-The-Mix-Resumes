@@ -3,18 +3,13 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Home</title>
+        <title>Resume Form</title>
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-            crossorigin="anonymous"
         />
     </head>
-
     <body>
-        <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="/">Get In The Mix Resumes</a>
             <button
@@ -28,7 +23,7 @@
             >
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="/about-us">About Us</a>
@@ -39,19 +34,80 @@
                         >
                     </li>
                 </ul>
+                <!-- Load Button -->
+                <button
+                    class="btn btn-secondary my-2 my-sm-0"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#resumeModal"
+                >
+                    Load Resumes
+                </button>
             </div>
         </nav>
 
-        <script
-            src="https://code.jquery.com/jquery-3.7.1.js"
-            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-            crossorigin="anonymous"
-        ></script>
-        <!-- Bootstrap Bundle with Popper -->
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMECvQ9AqH0cI1R0mEzLc2B5Qa6H3WHwTfRtC6nU6f"
-            crossorigin="anonymous"
-        ></script>
+        <!-- Modal for displaying resumes -->
+        <div
+            class="modal fade"
+            id="resumeModal"
+            tabindex="-1"
+            aria-labelledby="resumeModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resumeModalLabel">
+                            List of Resumes
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul id="resumeList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Submit Your Resume</h2>
+                    <form
+                        method="POST"
+                        action="{{ url_for('controllers_bp.save_resume') }}"
+                    >
+                        {{ form.hidden_tag() }} {% for field in form if
+                        field.name != 'csrf_token' %}
+                        <div class="mb-3">
+                            {{ field.label(class="form-label") }} {{
+                            field(class="form-control", required=True) }} {% if
+                            field.errors %}
+                            <div class="invalid-feedback">
+                                {{ field.errors[0] }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h2>Information</h2>
+                    <p>
+                        Welcome to our resume submission service. Please fill
+                        out the form to the left with your details.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{{ url_for('static', filename='js/resumeScripts.js') }}"></script>
     </body>
 </html>
