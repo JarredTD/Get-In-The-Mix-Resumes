@@ -95,7 +95,7 @@ def export_resume(resume_id):
             "static/word/resume.docx", as_attachment=True, download_name="resume.docx"
         )
     else:
-        return f"Error: No resume found with ID {resume_id}"
+        return f"Error: No resume found with ID {resume_id}", 404
 
 
 @resumes_bp.route("/save-resume", methods=["POST"])
@@ -116,7 +116,10 @@ def save_resume():
 
         # Handling Experience
         for exp_form in form.experiences.entries:
-            bullet_points_list = exp_form.data["bullet_points"].split("\n")
+            if exp_form.data["bullet_points"] is not None:
+                bullet_points_list = exp_form.data["bullet_points"].split("\n")
+            else:
+                bullet_points_list = None
             experience = Experience(
                 company_name=exp_form.data["company_name"],
                 title=exp_form.data["title"],
@@ -140,7 +143,10 @@ def save_resume():
 
         # Handling Extracurricular Activities
         for extra_form in form.extracurriculars.entries:
-            bullet_points_list = extra_form.data["bullet_points"].split("\n")
+            if extra_form.data["bullet_points"] is not None:
+                bullet_points_list = extra_form.data["bullet_points"].split("\n")
+            else:
+                bullet_points_list = None
             extracurricular = Extracurricular(
                 name=extra_form.data["name"],
                 title=extra_form.data["title"],
@@ -150,7 +156,10 @@ def save_resume():
 
         # Handling Projects
         for proj_form in form.projects.entries:
-            bullet_points_list = proj_form.data["bullet_points"].split("\n")
+            if proj_form.data["bullet_points"] is not None:
+                bullet_points_list = proj_form.data["bullet_points"].split("\n")
+            else:
+                bullet_points_list = None
             project = Project(
                 name=proj_form.data["name"],
                 language_stack=proj_form.data["language_stack"],
