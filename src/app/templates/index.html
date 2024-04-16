@@ -80,7 +80,7 @@
                     <h2>Submit Your Resume</h2>
                     <form
                         method="POST"
-                        action="{{ url_for('controllers_bp.save_resume') }}"
+                        action="{{ url_for('resumes_bp.save_resume') }}"
                     >
                         {{ form.hidden_tag() }} {% for field in form if
                         field.name != 'csrf_token' %}

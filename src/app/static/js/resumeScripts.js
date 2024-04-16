@@ -1,154 +1,181 @@
 $(document).ready(function () {
-  // Show the modal
-  $("#resumeModal").on("show.bs.modal", function (e) {
-    $.ajax({
-      url: "/load-resume-ids",
-      type: "GET",
-      success: function (response) {
-        const list = $("#resumeList");
-        list.empty();
-        response.forEach(function (resume) {
-          const listItem = $(
-            `<li>` +
-              `Resume ID: <a href="#" class="load-resume" data-id="${resume.id}">${resume.id}</a> ` +
-              `<button class='btn btn-success export-btn' data-id='${resume.id}'>Export</button> ` +
-              `<button class='btn btn-danger delete-btn' data-id='${resume.id}'>Delete</button>` +
-              `</li>`,
-          );
-          list.append(listItem);
-        });
-        bindButtonEvents();
-      },
-      error: function (xhr) {
-        console.log("Error:", xhr.responseText);
-      },
-    });
+  // Initialize the event handlers when the document is ready
+  initModalEvents();
+  initResumeHandlers();
+});
+
+/**
+ * Initializes event handlers for the resume modal.
+ */
+function initModalEvents() {
+  $("#resumeModal").on("show.bs.modal", loadResumeList);
+}
+
+/**
+ * Loads resume list and binds event handlers to UI elements inside the modal.
+ */
+function loadResumeList() {
+  $.ajax({
+    url: "resumes/load-resume-ids",
+    type: "GET",
+    success: populateResumeList,
+    error: function (xhr) {
+      console.log("Error:", xhr.responseText);
+    },
+  });
+}
+
+/**
+ * Populates the list of resumes in the UI.
+ * @param {Array} response - List of resumes from the server.
+ */
+function populateResumeList(response) {
+  const list = $("#resumeList");
+  list.empty();
+  response.forEach(function (resume) {
+    const listItem = $(
+      `<li>` +
+        `Resume ID: <a href="#" class="load-resume" data-id="${resume.id}">${resume.id}</a> ` +
+        `<button class='btn btn-success export-btn' data-id='${resume.id}'>Export</button> ` +
+        `<button class='btn btn-danger delete-btn' data-id='${resume.id}'>Delete</button>` +
+        `</li>`,
+    );
+    list.append(listItem);
+  });
+  bindButtonEvents();
+}
+
+/**
+ * Binds click events for loading, exporting, and deleting resumes.
+ */
+function bindButtonEvents() {
+  $(".load-resume").click(function (e) {
+    e.preventDefault();
+    loadResumeData($(this).data("id"));
+    $("#resumeModal").modal("hide");
   });
 
-  function bindButtonEvents() {
-    $(".load-resume").click(function (e) {
-      e.preventDefault();
-      const id = $(this).data("id");
-      loadResumeData(id);
+  $(".export-btn").click(function () {
+    window.location.href = `resumes/export-resume/${$(this).data("id")}`;
+  });
+
+  $(".delete-btn").click(function () {
+    const id = $(this).data("id");
+    if (confirm("Are you sure you want to delete this resume?")) {
+      deleteResume(id);
+    }
+  });
+}
+
+/**
+ * Sends a DELETE request to remove a resume.
+ * @param {string} id - The ID of the resume to delete.
+ */
+function deleteResume(id) {
+  $.ajax({
+    url: `resumes/delete-resume/${id}`,
+    type: "DELETE",
+    success: function () {
+      alert("Resume deleted successfully");
       $("#resumeModal").modal("hide");
-    });
+      $("#resumeModal").modal("show");
+    },
+    error: function (xhr) {
+      alert("Error deleting resume: " + xhr.responseText);
+    },
+  });
+}
 
-    $(".export-btn").click(function () {
-      const id = $(this).data("id");
-      window.location.href = `/export-resume/${id}`;
-    });
+/**
+ * Fetches and displays data for a specific resume.
+ * @param {string} resumeId - ID of the resume to load.
+ */
+function loadResumeData(resumeId) {
+  $.ajax({
+    url: `resumes/load-resume/${resumeId}`,
+    type: "GET",
+    success: displayResumeData,
+    error: function (xhr) {
+      console.log("Error loading resume:", xhr.responseText);
+    },
+  });
+}
 
-    $(".delete-btn").click(function () {
-      const id = $(this).data("id");
-      if (confirm("Are you sure you want to delete this resume?")) {
-        $.ajax({
-          url: `/delete-resume/${id}`,
-          type: "DELETE",
-          success: function () {
-            alert("Resume deleted successfully");
-            $("#resumeModal").modal("hide");
-            $("#resumeModal").modal("show");
-          },
-          error: function (xhr) {
-            alert("Error deleting resume: " + xhr.responseText);
-          },
-        });
-      }
-    });
-  }
+/**
+ * Displays the fetched resume data in the modal.
+ * @param {Object} data - Data of the resume to display.
+ */
+function displayResumeData(data) {
+  const infoContainer = $("#infoDisplay");
+  infoContainer.empty();
+  appendResumeData(data, infoContainer);
+}
 
-  // Load individual resume data
-  function loadResumeData(resumeId) {
-    $.ajax({
-      url: `/load-resume/${resumeId}`,
-      type: "GET",
-      success: function (data) {
-        displayResumeData(data);
-      },
-      error: function (xhr) {
-        console.log("Error loading resume:", xhr.responseText);
-      },
-    });
-  }
-
-  // Display formatted resume data
-  function displayResumeData(data) {
-    const infoContainer = $("#infoDisplay");
-    infoContainer.empty();
-
-    function appendData(key, value, parentElement) {
+/**
+ * Appends formatted resume data to a given element, ignoring empty entries and ids.
+ * @param {Object} data - Resume data to append.
+ * @param {jQuery} parentElement - The element to append data to.
+ */
+function appendResumeData(data, parentElement) {
+  /**
+   * Recursively appends data to the DOM, handling objects and arrays properly.
+   * Ignores empty values and keys containing 'id'.
+   * @param {string} key - The key for the current data item.
+   * @param {*} value - The value for the current data item.
+   * @param {jQuery} container - The container element to append data to.
+   */
+  function appendData(key, value, container) {
+    if (!key.toLowerCase().includes("id") && value != null && value !== "") {
       const formattedKey = key.charAt(0).toUpperCase() + key.slice(1);
-      if (Array.isArray(value)) {
-        const listContainer = $('<div class="mb-3">').appendTo(parentElement);
-        listContainer.append(
-          `<strong>${formattedKey}:</strong><ul class="list-unstyled">`,
-        );
-        value.forEach((item, index) => {
-          const itemElement = $("<li>").appendTo(listContainer.find("ul"));
-          if (typeof item === "object" && item !== null) {
-            appendObjectData(item, itemElement);
-          } else {
-            itemElement.text(item);
+      if (Array.isArray(value) && value.length > 0) {
+        const listContainer = $('<div class="mb-3">')
+          .append(`<strong>${formattedKey}:</strong><ul class="list-unstyled">`)
+          .appendTo(container);
+        value.forEach((item) => {
+          if (item) {
+            const itemElement = $("<li>").appendTo(listContainer.find("ul"));
+            if (typeof item === "object" && item !== null) {
+              appendObjectData(item, itemElement);
+            } else {
+              itemElement.text(item);
+            }
           }
         });
-      } else if (typeof value === "object" && value !== null) {
-        const objectContainer = $('<div class="mb-3">').appendTo(parentElement);
-        objectContainer.append(`<strong>${formattedKey}:</strong>`);
-        appendObjectData(value, objectContainer);
-      } else {
-        parentElement.append(
+      } else if (
+        typeof value === "object" &&
+        value !== null &&
+        Object.keys(value).length > 0
+      ) {
+        const objectContainer = $('<div class="mb-3">')
+          .append(`<strong>${formattedKey}:</strong>`)
+          .appendTo(container);
+        Object.entries(value).forEach(([subKey, subValue]) => {
+          appendData(
+            subKey,
+            subValue,
+            $('<div class="pl-3">').appendTo(objectContainer),
+          );
+        });
+      } else if (typeof value === "string" || typeof value === "number") {
+        container.append(
           `<div><strong>${formattedKey}:</strong> ${value}</div>`,
         );
       }
     }
+  }
 
-    function appendObjectData(obj, container) {
-      const objContainer = $('<ul class="list-unstyled pl-3">').appendTo(
-        container,
-      );
-      Object.entries(obj).forEach(([subKey, subValue]) => {
-        if (!subKey.toLowerCase().includes("id")) {
-          const formattedSubKey =
-            subKey.charAt(0).toUpperCase() + subKey.slice(1);
-          if (typeof subValue !== "object") {
-            objContainer.append(`<li>${formattedSubKey}: ${subValue}</li>`);
-          } else {
-            appendData(subKey, subValue, $("<li>").appendTo(objContainer));
-          }
-        }
-      });
-    }
-
-    const generalInfoKeys = [
-      "First_name",
-      "Last_name",
-      "Email",
-      "Phone_number",
-      "Github_link",
-      "Linkedin_link",
-      "Entry_date",
-    ];
-    const generalInfo = {};
-    const detailedInfo = {};
-
-    Object.keys(data).forEach((key) => {
-      if (generalInfoKeys.includes(key)) {
-        generalInfo[key] = data[key];
-      } else {
-        detailedInfo[key] = data[key];
-      }
-    });
-
-    Object.entries(generalInfo).forEach(([key, value]) => {
-      if (!key.toLowerCase().includes("id")) {
-        appendData(key, value, infoContainer);
-      }
-    });
-
-    Object.entries(detailedInfo).forEach(([key, value]) => {
-      if (!key.toLowerCase().includes("id")) {
-        appendData(key, value, infoContainer);
-      }
+  /**
+   * Handles appending object data by delegating to appendData for each entry.
+   * @param {Object} obj - The object whose entries will be appended.
+   * @param {jQuery} container - The container element to append object entries to.
+   */
+  function appendObjectData(obj, container) {
+    Object.entries(obj).forEach(([subKey, subValue]) => {
+      appendData(subKey, subValue, container);
     });
   }
-});
+
+  Object.entries(data).forEach(([key, value]) => {
+    appendData(key, value, parentElement);
+  });
+}

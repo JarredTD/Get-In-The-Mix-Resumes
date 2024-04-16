@@ -1,27 +1,11 @@
-"""Controller for the flask app"""
-
-from typing import List, Union
-from urllib.parse import urlparse, urljoin
 from datetime import datetime
 
-from flask import (
-    Blueprint,
-    abort,
-    flash,
-    jsonify,
-    redirect,
-    render_template,
-    request,
-    url_for,
-    send_file,
-)
-from flask.wrappers import Response
-from flask_login import login_user, logout_user, current_user, login_required
-from werkzeug.security import generate_password_hash
+from flask import jsonify, redirect, url_for, send_file
+from flask_login import login_required, current_user
 
+from . import resumes_bp
 from app import db
-from .forms import LoginForm, RegistrationForm, ResumeForm
-from .models import (
+from ..models import (
     ResumeData,
     Experience,
     Education,
@@ -29,30 +13,14 @@ from .models import (
     Skill,
     Course,
     Extracurricular,
-    User,
 )
-from .util.gen_resume import generate_resume
+from ..forms import ResumeForm
+from ..util.gen_resume import generate_resume
 
 
-controllers_bp = Blueprint("controllers_bp", __name__)
-
-
-@controllers_bp.route("/test-db", methods=["GET"])
-def test_db() -> str:
-    """
-    Sanity Check that db is connected
-
-    :returns: Message that db is connected
-    :rtype: str
-    """
-    ResumeData.query.first()
-
-    return "Database is connected."
-
-
-@controllers_bp.route("/load-resume-ids", methods=["GET"])
+@resumes_bp.route("/load-resume-ids", methods=["GET"])
 @login_required
-def load_resume_ids() -> Response:
+def load_resume_ids():
     """
     Queries all ids found in ResumeData table
 
@@ -73,7 +41,7 @@ def load_resume_ids() -> Response:
     return jsonify(resume_list)
 
 
-@controllers_bp.route("/load-resume/<int:resume_id>", methods=["GET"])
+@resumes_bp.route("/load-resume/<int:resume_id>", methods=["GET"])
 @login_required
 def load_resume(resume_id):
     """
@@ -92,71 +60,7 @@ def load_resume(resume_id):
     return jsonify(resume.to_dict())
 
 
-@controllers_bp.route("/login", methods=["GET", "POST"])
-def login():
-    """
-    Route for handling the login process. This function processes both GET
-    and POST requests.On GET, it displays the login form. On POST,
-    it validates the form and logs the user in if the credentials are correct.
-
-    :return: Redirects to the next page if login is successful and the next URL
-             is safe. Otherwise, renders the login template again with a message
-             for invalid credentials or displays the login form.
-    """
-    form = LoginForm()
-    if form.validate_on_submit():
-
-        username = form.username.data
-        password = form.password.data
-
-        user = User.query.filter_by(username=username).first()
-        if user and user.check_password(password):
-            login_user(user)
-            next_url = request.args.get("next")
-
-            if not url_has_allowed_host_and_scheme(next_url, request.host):
-                return abort(400)
-            return redirect(url_for("views_bp.index"))
-        flash("Invalid Credentials")
-
-    return render_template("login.html", form=form)
-
-
-@controllers_bp.route("/logout")
-def logout():
-    """
-    Route to handle the logout process. It logs out the current user.
-
-    :return: Redirects to the login page.
-    """
-    logout_user()
-    return redirect(url_for("controllers_bp.login"))
-
-
-@controllers_bp.route("/register", methods=["GET", "POST"])
-def register():
-    """
-    Route for handling user registration. On GET, displays the registration form.
-    On POST, it processes the form and creates a new user with the provided
-    credentials.
-
-    :return: Redirects to the login page on successful registration, otherwise renders
-             the registration form again with error messages.
-    """
-    form = RegistrationForm()
-    if form.is_submitted():
-        if form.validate():
-            hashed_password = generate_password_hash(form.password.data)
-            user = User(username=form.username.data, password_hash=hashed_password)
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for("controllers_bp.login"))
-        flash("Registration Not Successful")
-
-    return render_template("register.html", form=form)
-
-
-@controllers_bp.route("/delete-resume/<int:resume_id>", methods=["DELETE"])
+@resumes_bp.route("/delete-resume/<int:resume_id>", methods=["DELETE"])
 @login_required
 def delete_resume(resume_id):
     resume = ResumeData.query.get(resume_id)
@@ -180,7 +84,7 @@ def delete_resume(resume_id):
         return "Resume not found or not authorized to delete", 404
 
 
-@controllers_bp.route("/export-resume/<int:resume_id>", methods=["GET"])
+@resumes_bp.route("/export-resume/<int:resume_id>", methods=["GET"])
 @login_required
 def export_resume(resume_id):
     resume_data = ResumeData.query.get(resume_id)
@@ -194,7 +98,7 @@ def export_resume(resume_id):
         return f"Error: No resume found with ID {resume_id}"
 
 
-@controllers_bp.route("/save-resume", methods=["POST"])
+@resumes_bp.route("/save-resume", methods=["POST"])
 @login_required
 def save_resume():
     form = ResumeForm()
@@ -277,26 +181,3 @@ def save_resume():
             for err in errorMessages:
                 print(f"Error in {fieldName}: {err}")
         return "Error: Form validation failed. Check console for details."
-
-
-def url_has_allowed_host_and_scheme(target, base_host, require_https=False):
-    """
-    Checks if the provided URL has an allowed host and scheme.
-
-    :param target: The target URL to validate.
-    :param base_host: The base host to compare against.
-    :param require_https: Boolean indicating if HTTPS is required.
-    :return: True if the scheme and host of the target URL are allowed,
-            False otherwise.
-    """
-    full_url = urljoin(request.host_url, target)
-    parsed_url = urlparse(full_url)
-
-    is_scheme_allowed = (
-        parsed_url.scheme in ("https",)
-        if require_https
-        else parsed_url.scheme in ("http", "https")
-    )
-    is_host_allowed = parsed_url.netloc == base_host
-
-    return is_scheme_allowed and is_host_allowed

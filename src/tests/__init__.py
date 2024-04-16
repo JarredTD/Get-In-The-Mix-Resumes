@@ -20,9 +20,9 @@ from app.scripts.models import (
     Skill,
 )
 
-LOGIN_ROUTE = "/login"
-REGISTER_ROUTE = "/register"
-LOGOUT_ROUTE = "/logout"
+LOGIN_ROUTE = "auth/login"
+REGISTER_ROUTE = "auth/register"
+LOGOUT_ROUTE = "auth/logout"
 
 
 class BaseTestCase(unittest.TestCase):

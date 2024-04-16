@@ -9,8 +9,8 @@ NEW_USER_USERNAME = "newuser"
 NEW_USER_PASSWORD = "123456"
 TEST_USERNAME = "testuser"
 TEST_PASSWORD = "test"
-LOAD_RESUME_IDS_ROUTE = "/load-resume-ids"
-LOAD_RESUME_ROUTE = "/load-resume"
+LOAD_RESUME_IDS_ROUTE = "resumes/load-resume-ids"
+LOAD_RESUME_ROUTE = "resumes/load-resume"
 JSON = "application/json"
 
 

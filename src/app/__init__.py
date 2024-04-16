@@ -29,14 +29,17 @@ def create_app(config_class=DevelopmentConfig):
         # pylint: disable=unused-import
 
         from app.scripts import models
-        from app.scripts.controllers import controllers_bp
-        from app.scripts.views import views_bp
+        from app.scripts import forms
+        from app.scripts import controllers
+        from app.scripts import views
 
         @login_manager.user_loader
         def load_user(user_id):
             return models.User.query.get(user_id)
 
-        app.register_blueprint(views_bp)
-        app.register_blueprint(controllers_bp)
+        app.register_blueprint(views.views_bp)
+        app.register_blueprint(controllers.authentication_bp, url_prefix="/auth")
+        app.register_blueprint(controllers.resumes_bp, url_prefix="/resumes")
+        app.register_blueprint(controllers.database_bp, url_prefix="/db")
 
     return app

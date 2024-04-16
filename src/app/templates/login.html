@@ -1,116 +1,116 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Get In The Mix Resume</title>
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body,
-      html {
-        height: 100%; /* Full height of the viewport */
-        margin: 0; /* Reset default margin */
-        font-family: "Roboto", sans-serif; /* Roboto for body text */
-        background: #f4f4f9; /* Light grey background */
-        display: flex;
-        align-items: center; /* Center content vertically */
-        justify-content: center; /* Center content horizontally */
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login - Get In The Mix Resume</title>
+        <link
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            body,
+            html {
+                height: 100%; /* Full height of the viewport */
+                margin: 0; /* Reset default margin */
+                font-family: "Roboto", sans-serif; /* Roboto for body text */
+                background: #f4f4f9; /* Light grey background */
+                display: flex;
+                align-items: center; /* Center content vertically */
+                justify-content: center; /* Center content horizontally */
+            }
 
-      .center-content {
-        width: 100%;
-        max-width: 400px; /* Maximum width */
-      }
+            .center-content {
+                width: 100%;
+                max-width: 400px; /* Maximum width */
+            }
 
-      .form-container {
-        padding: 40px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: white;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-      }
+            .form-container {
+                padding: 40px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background-color: white;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            }
 
-      .title {
-        font-size: 50px; /* Larger font size for the title */
-        font-family: "Playfair Display", serif; /* Stylish serif font */
-        color: #333;
-        margin-bottom: 20px; /* Space below the title */
-      }
+            .title {
+                font-size: 50px; /* Larger font size for the title */
+                font-family: "Playfair Display", serif; /* Stylish serif font */
+                color: #333;
+                margin-bottom: 20px; /* Space below the title */
+            }
 
-      .flashes {
-        list-style: none;
-        padding: 0;
-        margin-bottom: 20px;
-        color: red; /* Red color for error messages */
-      }
+            .flashes {
+                list-style: none;
+                padding: 0;
+                margin-bottom: 20px;
+                color: red; /* Red color for error messages */
+            }
 
-      .input-class {
-        width: 100%; /* Full width inputs */
-      }
+            .input-class {
+                width: 100%; /* Full width inputs */
+            }
 
-      input[type="submit"],
-      .btn-secondary {
-        width: 48%; /* Half width for buttons */
-        padding: 8px; /* Padding for better touch interaction */
-      }
+            input[type="submit"],
+            .btn-secondary {
+                width: 48%; /* Half width for buttons */
+                padding: 8px; /* Padding for better touch interaction */
+            }
 
-      .btn-secondary {
-        margin-left: 4%; /* Space between the buttons */
-      }
+            .btn-secondary {
+                margin-left: 4%; /* Space between the buttons */
+            }
 
-      .text-danger {
-        color: red; /* Red color for error messages */
-      }
-    </style>
-  </head>
-  <body>
-    <div class="center-content">
-      <h1 class="title">Get In The Mix Resume</h1>
-      {% with messages = get_flashed_messages() %} {% if messages %}
-      <ul class="flashes">
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %} {% endwith %}
-      <div class="form-container">
-        <form action="" method="post">
-          {{ form.hidden_tag() }}
-          <div class="form-group">
-            {{ form.username.label(class='form-label') }} {{
-            form.username(size=32, class='form-control input-class') }} {% for
-            error in form.username.errors %}
-            <div class="text-danger">[{{ error }}]</div>
-            {% endfor %}
-          </div>
-          <div class="form-group">
-            {{ form.password.label(class='form-label') }} {{
-            form.password(size=32, class='form-control input-class') }} {% for
-            error in form.password.errors %}
-            <div class="text-danger">[{{ error }}]</div>
-            {% endfor %}
-          </div>
-          <div class="form-group d-flex justify-content-between">
-            {{ form.submit(class='btn btn-primary') }}
-            <a
-              href="{{ url_for('controllers_bp.register') }}"
-              class="btn btn-secondary"
-              >Register</a
-            >
-          </div>
-        </form>
-      </div>
-    </div>
-    <!-- Bootstrap JS and jQuery, although not necessary if no Bootstrap JS features are used -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </body>
+            .text-danger {
+                color: red; /* Red color for error messages */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="center-content">
+            <h1 class="title">Get In The Mix Resume</h1>
+            {% with messages = get_flashed_messages() %} {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %} {% endwith %}
+            <div class="form-container">
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.username.label(class='form-label') }} {{
+                        form.username(size=32, class='form-control input-class')
+                        }} {% for error in form.username.errors %}
+                        <div class="text-danger">[{{ error }}]</div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password.label(class='form-label') }} {{
+                        form.password(size=32, class='form-control input-class')
+                        }} {% for error in form.password.errors %}
+                        <div class="text-danger">[{{ error }}]</div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                        {{ form.submit(class='btn btn-primary') }}
+                        <a
+                            href="{{ url_for('authentication_bp.register') }}"
+                            class="btn btn-secondary"
+                            >Register</a
+                        >
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Bootstrap JS and jQuery, although not necessary if no Bootstrap JS features are used -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
 </html>
