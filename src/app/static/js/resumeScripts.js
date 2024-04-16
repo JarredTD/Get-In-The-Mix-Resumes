@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  // Show the model
+  // Show the modal
   $("#resumeModal").on("show.bs.modal", function (e) {
     $.ajax({
       url: "/load-resume-ids",
@@ -57,13 +57,13 @@ $(document).ready(function () {
     });
   }
 
-  // Function to load individual resume data
+  // Load individual resume data
   function loadResumeData(resumeId) {
     $.ajax({
       url: `/load-resume/${resumeId}`,
       type: "GET",
       success: function (data) {
-        populateFormFields(data);
+        displayResumeData(data);
       },
       error: function (xhr) {
         console.log("Error loading resume:", xhr.responseText);
@@ -71,50 +71,84 @@ $(document).ready(function () {
     });
   }
 
-  // Function to populate form fields, including handling nested data structures
-  function populateFormFields(data) {
-    Object.entries(data).forEach(([key, value]) => {
-      if (!Array.isArray(value)) {
-        $(`#${key}`).val(value);
+  // Display formatted resume data
+  function displayResumeData(data) {
+    const infoContainer = $("#infoDisplay");
+    infoContainer.empty();
+
+    function appendData(key, value, parentElement) {
+      const formattedKey = key.charAt(0).toUpperCase() + key.slice(1);
+      if (Array.isArray(value)) {
+        const listContainer = $('<div class="mb-3">').appendTo(parentElement);
+        listContainer.append(
+          `<strong>${formattedKey}:</strong><ul class="list-unstyled">`,
+        );
+        value.forEach((item, index) => {
+          const itemElement = $("<li>").appendTo(listContainer.find("ul"));
+          if (typeof item === "object" && item !== null) {
+            appendObjectData(item, itemElement);
+          } else {
+            itemElement.text(item);
+          }
+        });
+      } else if (typeof value === "object" && value !== null) {
+        const objectContainer = $('<div class="mb-3">').appendTo(parentElement);
+        objectContainer.append(`<strong>${formattedKey}:</strong>`);
+        appendObjectData(value, objectContainer);
+      } else {
+        parentElement.append(
+          `<div><strong>${formattedKey}:</strong> ${value}</div>`,
+        );
+      }
+    }
+
+    function appendObjectData(obj, container) {
+      const objContainer = $('<ul class="list-unstyled pl-3">').appendTo(
+        container,
+      );
+      Object.entries(obj).forEach(([subKey, subValue]) => {
+        if (!subKey.toLowerCase().includes("id")) {
+          const formattedSubKey =
+            subKey.charAt(0).toUpperCase() + subKey.slice(1);
+          if (typeof subValue !== "object") {
+            objContainer.append(`<li>${formattedSubKey}: ${subValue}</li>`);
+          } else {
+            appendData(subKey, subValue, $("<li>").appendTo(objContainer));
+          }
+        }
+      });
+    }
+
+    const generalInfoKeys = [
+      "First_name",
+      "Last_name",
+      "Email",
+      "Phone_number",
+      "Github_link",
+      "Linkedin_link",
+      "Entry_date",
+    ];
+    const generalInfo = {};
+    const detailedInfo = {};
+
+    Object.keys(data).forEach((key) => {
+      if (generalInfoKeys.includes(key)) {
+        generalInfo[key] = data[key];
+      } else {
+        detailedInfo[key] = data[key];
       }
     });
 
-    populateNestedFields("experiences", data.experiences);
-    populateNestedFields("educations", data.educations);
-    populateNestedFields("projects", data.projects);
-    populateNestedFields("skills", data.skills);
-    populateNestedFields("courses", data.courses);
-  }
+    Object.entries(generalInfo).forEach(([key, value]) => {
+      if (!key.toLowerCase().includes("id")) {
+        appendData(key, value, infoContainer);
+      }
+    });
 
-  // Function to handle array-type nested data
-  function populateNestedFields(containerId, items) {
-    const container = $(`#${containerId}`);
-    container.empty();
-
-    if (items) {
-      items.forEach((item, index) => {
-        const formGroup = $('<div class="form-group">').appendTo(container);
-        Object.entries(item).forEach(([key, value]) => {
-          const label = $("<label>").text(
-            key.charAt(0).toUpperCase() + key.slice(1) + ":",
-          );
-          let input;
-
-          if (key.includes("bullet_points")) {
-            input = $("<textarea>")
-              .addClass("form-control")
-              .attr("name", `${containerId}-${index}-${key}`);
-          } else {
-            input = $("<input>")
-              .addClass("form-control")
-              .attr("type", "text")
-              .attr("name", `${containerId}-${index}-${key}`);
-          }
-          input.val(value);
-
-          formGroup.append(label, input);
-        });
-      });
-    }
+    Object.entries(detailedInfo).forEach(([key, value]) => {
+      if (!key.toLowerCase().includes("id")) {
+        appendData(key, value, infoContainer);
+      }
+    });
   }
 });
