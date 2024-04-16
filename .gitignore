@@ -338,3 +338,4 @@ $RECYCLE.BIN/
 **/db
 **/*.db
 scripts/env.sh
+src/app/static/word
