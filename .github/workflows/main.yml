@@ -9,6 +9,9 @@ jobs:
     container:
       image: python:3.12
 
+    env:
+      SAVE_PATH: "src/app/static/word/resume.docx"
+
     steps:
       - uses: actions/checkout@v2
 
