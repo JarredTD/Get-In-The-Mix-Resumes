@@ -1,3 +1,4 @@
+import os
 from docx import Document
 from docx.shared import Pt
 from docx.enum.style import WD_STYLE_TYPE
@@ -77,4 +78,4 @@ def generate_resume(resume_data):
         for point in extracurricular.bullet_points:
             document.add_paragraph(point, style="List Bullet")
 
-    document.save("src/app/static/word/resume.docx")
+    document.save(os.getenv("SAVE_PATH"))

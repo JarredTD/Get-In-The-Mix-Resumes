@@ -21,7 +21,7 @@ def create_app(config_class=DevelopmentConfig):
     migrate.init_app(app, db)
 
     login_manager.init_app(app)
-    login_manager.login_view = "controllers_bp.login"
+    login_manager.login_view = "authentication_bp.login"
 
     with app.app_context():
         # pylint: disable=wrong-import-position

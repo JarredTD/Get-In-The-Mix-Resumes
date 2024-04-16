@@ -4,4 +4,5 @@ Flask-Migrate
 Flask-Login
 Flask-WTF
 python-docx
+email_validator
 gunicorn

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 clear
-
+source ./scripts/env.sh
 source ./scripts/build.sh
 
 clear
