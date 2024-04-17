@@ -1,3 +1,5 @@
+"""Expose models for ease of importing"""
+
 from app import db
 
 from .user import User

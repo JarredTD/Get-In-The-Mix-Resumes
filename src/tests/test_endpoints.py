@@ -2,7 +2,6 @@
 
 # pylint: disable=no-name-in-module
 
-import json
 from app.scripts import models
 from tests import BaseTestCase
 
@@ -13,6 +12,7 @@ TEST_PASSWORD = "test"
 LOAD_RESUME_IDS_ROUTE = "resumes/load-resume-ids"
 LOAD_RESUME_ROUTE = "resumes/load-resume"
 JSON = "application/json"
+EXPORT = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 
 class ResumeEndpointTestCase(BaseTestCase):
@@ -79,6 +79,7 @@ class ResumeEndpointTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_delete_resume_success(self):
+        """Test successful resume deletion"""
         resume = self.create_resume_data()
         self.login(TEST_USERNAME, TEST_PASSWORD)
         response = self.client.delete(f"resumes/delete-resume/{resume.id}")
@@ -86,11 +87,13 @@ class ResumeEndpointTestCase(BaseTestCase):
         self.assertEqual(response.data.decode(), "Resume deleted successfully")
 
     def test_delete_resume_not_found(self):
+        """Test delete attempt on non-existing resume"""
         self.login(TEST_USERNAME, TEST_PASSWORD)
         response = self.client.delete("/delete-resume/999")
         self.assertEqual(response.status_code, 404)
 
     def test_delete_resume_unauthorized(self):
+        """Test delete attempt w/ wrong user"""
         resume = self.create_resume_data()
         self.register(NEW_USER_USERNAME, NEW_USER_PASSWORD, NEW_USER_PASSWORD)
         self.login(NEW_USER_USERNAME, NEW_USER_PASSWORD)
@@ -101,6 +104,7 @@ class ResumeEndpointTestCase(BaseTestCase):
         )
 
     def test_export_resume_success(self):
+        """Test successful export attempt"""
         resume = self.create_resume_data()
         self.create_experience(resume.id)
         self.create_education(resume.id)
@@ -112,19 +116,17 @@ class ResumeEndpointTestCase(BaseTestCase):
         self.login(TEST_USERNAME, TEST_PASSWORD)
         response = self.client.get(f"resumes/export-resume/{resume.id}")
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(
-            response.content_type.startswith(
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            )
-        )
+        self.assertTrue(response.content_type.startswith(EXPORT))
 
     def test_export_resume_not_found(self):
+        """Test export attempt w/ resume not found"""
         self.login(TEST_USERNAME, TEST_PASSWORD)
         response = self.client.get("resumes/export-resume/999")
         self.assertEqual(response.status_code, 404)
         self.assertIn("Error: No resume found with ID 999", response.data.decode())
 
     def test_save_resume_validation_error(self):
+        """Test validation error w/ save attempt"""
         self.login(TEST_USERNAME, TEST_PASSWORD)
         response = self.client.post("resumes/save-resume", data={})
         self.assertEqual(response.status_code, 200)
@@ -134,6 +136,7 @@ class ResumeEndpointTestCase(BaseTestCase):
         )
 
     def test_save_resume_success(self):
+        """Test successful saving of a resume"""
         self.login(TEST_USERNAME, TEST_PASSWORD)
 
         form_data = {
@@ -152,10 +155,10 @@ class ResumeEndpointTestCase(BaseTestCase):
             "educations-0-grad_year": "2024",
             "extracurriculars-0-name": "Debate Club",
             "extracurriculars-0-title": "President",
-            "extracurriculars-0-bullet_points": "Led team to national championships;Organized club meetings",
+            "extracurriculars-0-bullet_points": "Led team to national championships",
             "projects-0-name": "Personal Website",
             "projects-0-language_stack": "HTML, CSS, JavaScript",
-            "projects-0-bullet_points": "Developed personal portfolio;Implemented responsive design",
+            "projects-0-bullet_points": "Developed personal portfolio",
             "skills-0-name": "Python",
             "courses-0-name": "Advanced Python Programming",
         }

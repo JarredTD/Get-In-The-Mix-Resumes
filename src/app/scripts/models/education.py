@@ -1,5 +1,6 @@
+"""Model for education data"""
+
 from . import db
-from .json_list import JsonList
 
 
 class Education(db.Model):

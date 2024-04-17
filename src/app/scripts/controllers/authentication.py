@@ -1,11 +1,13 @@
+"""Endpoints related to authentication"""
+
 from urllib.parse import urlparse, urljoin
 
 from flask import render_template, request, redirect, url_for, flash, abort
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user
 from werkzeug.security import generate_password_hash
 
-from . import authentication_bp
 from app import db
+from . import authentication_bp
 from ..forms import LoginForm, RegistrationForm
 from ..models import User
 
@@ -13,12 +15,15 @@ from ..models import User
 @authentication_bp.route("/login", methods=["GET", "POST"])
 def login():
     """
-    Route for handling the login process. This function processes both GET and POST requests.
-    On GET, it displays the login form. On POST, it validates the form and logs the user in if the credentials are correct.
+    Route for handling the login process. This function processes both GET and
+    POST requests.
+    On GET, it displays the login form. On POST, it validates the form and logs
+    the user in if the credentials are correct.
 
     Returns:
         Redirects to the next page if login is successful and the next URL is safe.
-        Otherwise, renders the login template again with a message for invalid credentials or displays the login form.
+        Otherwise, renders the login template again with a message for invalid
+        credentials or displays the login form.
     """
     form = LoginForm()
     if form.validate_on_submit():
@@ -54,7 +59,8 @@ def logout():
 def register():
     """
     Route for handling user registration. On GET, displays the registration form.
-    On POST, it processes the form and creates a new user with the provided credentials.
+    On POST, it processes the form and creates a new user with the provided
+    credentials.
 
     Returns:
         Redirects to the login page on successful registration, otherwise renders
@@ -83,7 +89,8 @@ def url_has_allowed_host_and_scheme(target, base_host, require_https=False):
         require_https (bool): Boolean indicating if HTTPS is required.
 
     Returns:
-        bool: True if the scheme and host of the target URL are allowed, False otherwise.
+        bool: True if the scheme and host of the target URL are allowed,
+        False otherwise.
     """
     full_url = urljoin(request.host_url, target)
     parsed_url = urlparse(full_url)

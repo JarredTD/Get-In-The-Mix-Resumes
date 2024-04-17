@@ -1,10 +1,12 @@
+"""Endpoints related to resume manipulation"""
+
 from datetime import datetime
 
 from flask import jsonify, redirect, url_for, send_file
 from flask_login import login_required, current_user
 
-from . import resumes_bp
 from app import db
+from . import resumes_bp
 from ..models import (
     ResumeData,
     Experience,
@@ -51,7 +53,8 @@ def load_resume(resume_id):
         resume_id (int): The ID of the resume to fetch.
 
     Returns:
-        Response: A JSON of the resume data for the found resume or an error for resume not found.
+        Response: A JSON of the resume data for the found resume or an error for
+        resume not found.
     """
     resume = ResumeData.query.filter_by(user_id=current_user.id, id=resume_id).first()
 
@@ -91,8 +94,8 @@ def delete_resume(resume_id):
         except Exception as e:
             db.session.rollback()
             return f"An error occurred while deleting the resume: {e}", 500
-    else:
-        return "Resume not found or not authorized to delete", 404
+
+    return "Resume not found or not authorized to delete", 404
 
 
 @resumes_bp.route("/export-resume/<int:resume_id>", methods=["GET"])
@@ -114,8 +117,7 @@ def export_resume(resume_id):
         return send_file(
             "static/word/resume.docx", as_attachment=True, download_name="resume.docx"
         )
-    else:
-        return f"Error: No resume found with ID {resume_id}", 404
+    return f"Error: No resume found with ID {resume_id}", 404
 
 
 @resumes_bp.route("/save-resume", methods=["POST"])
@@ -125,7 +127,8 @@ def save_resume():
     Saves a new resume based on the form submission.
 
     Returns:
-        Response: Redirects to the homepage if the form is successfully processed; otherwise, returns an error message.
+        Response: Redirects to the homepage if the form is successfully processed;
+        otherwise, returns an error message.
     """
     form = ResumeForm()
     if form.validate_on_submit():
@@ -211,8 +214,8 @@ def save_resume():
         db.session.commit()
 
         return redirect(url_for("views_bp.index"))
-    else:
-        for fieldName, errorMessages in form.errors.items():
-            for err in errorMessages:
-                print(f"Error in {fieldName}: {err}")
-        return "Error: Form validation failed. Check console for details."
+
+    for field_name, error_messages in form.errors.items():
+        for err in error_messages:
+            print(f"Error in {field_name}: {err}")
+    return "Error: Form validation failed. Check console for details."

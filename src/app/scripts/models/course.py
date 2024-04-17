@@ -1,3 +1,5 @@
+"""Model for course data"""
+
 from . import db
 
 

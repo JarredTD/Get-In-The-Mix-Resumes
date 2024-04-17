@@ -1,3 +1,5 @@
+"""Form for meta data, and housing other forms"""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, SubmitField, FormField
 from wtforms.validators import DataRequired, Email, Optional

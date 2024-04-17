@@ -1,3 +1,5 @@
+"""Model for skill data"""
+
 from . import db
 
 

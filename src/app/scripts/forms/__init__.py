@@ -1,3 +1,5 @@
+"""Expose forms for ease of importing"""
+
 from .experience import ExperienceForm
 from .education import EducationForm
 from .project import ProjectForm

@@ -1,8 +1,7 @@
 """Views rendered """
 
-from datetime import datetime
-from flask import Blueprint, render_template, redirect, url_for
-from flask_login import login_required, current_user
+from flask import render_template
+from flask_login import login_required
 from ..forms import ResumeForm
 from . import views_bp
 

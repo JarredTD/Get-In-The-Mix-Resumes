@@ -1,3 +1,5 @@
+"""Exposes blueprints for ease of importing"""
+
 from flask import Blueprint
 
 authentication_bp = Blueprint("authentication_bp", __name__)

@@ -1,3 +1,5 @@
+"""Model for project data"""
+
 from . import db
 from .json_list import JsonList
 

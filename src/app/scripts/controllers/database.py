@@ -1,4 +1,4 @@
-from flask import jsonify
+"""Test endpoint that checks for db connection"""
 
 from . import database_bp
 from ..models import ResumeData

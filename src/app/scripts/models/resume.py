@@ -1,3 +1,5 @@
+"""Model for resume data"""
+
 from datetime import datetime
 from . import db
 

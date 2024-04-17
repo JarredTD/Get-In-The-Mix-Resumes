@@ -1,3 +1,5 @@
+"""Custom Type Decorator for storing list of strings as json"""
+
 import json
 from sqlalchemy import TypeDecorator, Text
 
