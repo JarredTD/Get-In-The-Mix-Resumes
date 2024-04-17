@@ -50,17 +50,14 @@ Module Documentation
 .. toctree::
    :maxdepth: 2
 
-   app/app
-   app/config
-   app/scripts/controller
-   app/scripts/forms
-   app/scripts/models
-   app/scripts/views
-   tests/tests
-   tests/authentication
-   tests/db_sanity
-   tests/endpoints
-   tests/routes
+   src/app
+   src/app.scripts.controllers.rst
+   src/app.scripts.forms.rst
+   src/src/app.scripts.models.rst
+   src/app.scripts.views.rst
+   src/app.scripts.rst
+   src/tests
+
 
 Contributing
 ============

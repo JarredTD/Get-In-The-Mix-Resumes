@@ -6,7 +6,7 @@ mkdir -p "$SPHINX_PATH"
 
 source ./venv/bin/activate
 
-cd sphinx
+cd docs
 make clean
 make html 2>&1 | tee "../$SPHINX_PATH/sphinx_output.txt"
 cd ..
