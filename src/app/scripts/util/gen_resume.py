@@ -6,27 +6,46 @@ from datetime import datetime
 
 
 def add_heading_style(style, size, document):
-    """Add custom heading style with specified font size."""
+    """
+    Adds a custom heading style with a specified font size to the document.
+
+    Args:
+        style (str): The name of the style to add.
+        size (int): The font size in points.
+        document (Document): The Document object to which the style will be added.
+    """
     heading_style = document.styles.add_style(style, WD_STYLE_TYPE.PARAGRAPH)
     heading_style.font.size = Pt(size)
     heading_style.font.bold = True
 
 
 def add_subheading_style(style, size, document):
-    """Add custom subheading style with specified font size."""
+    """
+    Adds a custom subheading style with a specified font size to the document.
+
+    Args:
+        style (str): The name of the style to add.
+        size (int): The font size in points.
+        document (Document): The Document object to which the style will be added.
+    """
     subheading_style = document.styles.add_style(style, WD_STYLE_TYPE.PARAGRAPH)
     subheading_style.font.size = Pt(size)
     subheading_style.font.bold = True
 
 
 def generate_resume(resume_data):
+    """
+    Generates a resume document from the provided data.
+
+    Args:
+        resume_data (ResumeData): An object containing all necessary data to populate the resume.
+    """
     document = Document()
 
     add_heading_style("CustomHeading1", 14, document)
     add_subheading_style("CustomHeading2", 12, document)
 
     document.add_heading(f"{resume_data.first_name} {resume_data.last_name}", level=1)
-
     document.add_heading("Contact Information", level=2)
     document.add_paragraph(f"Email: {resume_data.email}")
     document.add_paragraph(f"Phone: {resume_data.phone_number}")

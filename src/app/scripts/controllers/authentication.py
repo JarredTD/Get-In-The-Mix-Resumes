@@ -13,17 +13,15 @@ from ..models import User
 @authentication_bp.route("/login", methods=["GET", "POST"])
 def login():
     """
-    Route for handling the login process. This function processes both GET
-    and POST requests.On GET, it displays the login form. On POST,
-    it validates the form and logs the user in if the credentials are correct.
+    Route for handling the login process. This function processes both GET and POST requests.
+    On GET, it displays the login form. On POST, it validates the form and logs the user in if the credentials are correct.
 
-    :return: Redirects to the next page if login is successful and the next URL
-             is safe. Otherwise, renders the login template again with a message
-             for invalid credentials or displays the login form.
+    Returns:
+        Redirects to the next page if login is successful and the next URL is safe.
+        Otherwise, renders the login template again with a message for invalid credentials or displays the login form.
     """
     form = LoginForm()
     if form.validate_on_submit():
-
         username = form.username.data
         password = form.password.data
 
@@ -45,7 +43,8 @@ def logout():
     """
     Route to handle the logout process. It logs out the current user.
 
-    :return: Redirects to the login page.
+    Returns:
+        Redirects to the login page.
     """
     logout_user()
     return redirect(url_for("authentication_bp.login"))
@@ -54,12 +53,12 @@ def logout():
 @authentication_bp.route("/register", methods=["GET", "POST"])
 def register():
     """
-    Route for handling user registration. On GET, displays the re gistration form.
-    On POST, it processes the form and creates a new user with the provided
-    credentials.
+    Route for handling user registration. On GET, displays the registration form.
+    On POST, it processes the form and creates a new user with the provided credentials.
 
-    :return: Redirects to the login page on successful registration, otherwise renders
-             the registration form again with error messages.
+    Returns:
+        Redirects to the login page on successful registration, otherwise renders
+        the registration form again with error messages.
     """
     form = RegistrationForm()
     if form.is_submitted():
@@ -78,11 +77,13 @@ def url_has_allowed_host_and_scheme(target, base_host, require_https=False):
     """
     Checks if the provided URL has an allowed host and scheme.
 
-    :param target: The target URL to validate.
-    :param base_host: The base host to compare against.
-    :param require_https: Boolean indicating if HTTPS is required.
-    :return: True if the scheme and host of the target URL are allowed,
-            False otherwise.
+    Args:
+        target (str): The target URL to validate.
+        base_host (str): The base host to compare against.
+        require_https (bool): Boolean indicating if HTTPS is required.
+
+    Returns:
+        bool: True if the scheme and host of the target URL are allowed, False otherwise.
     """
     full_url = urljoin(request.host_url, target)
     parsed_url = urlparse(full_url)

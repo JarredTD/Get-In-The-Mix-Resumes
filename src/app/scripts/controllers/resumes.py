@@ -22,10 +22,10 @@ from ..util.gen_resume import generate_resume
 @login_required
 def load_resume_ids():
     """
-    Queries all ids found in ResumeData table
+    Queries all ids found in ResumeData table.
 
-    :returns: List of all ids in ResumeData table
-    :rtype: List of Ints
+    Returns:
+        List[dict]: List of dictionaries each containing resume ID and entry date.
     """
     resume_data = (
         ResumeData.query.with_entities(ResumeData.id, ResumeData.entry_date)
@@ -47,9 +47,11 @@ def load_resume(resume_id):
     """
     Queries for a specific resume in the ResumeData table using the resume ID.
 
-    :param resume_id: The ID of the resume to fetch.
-    :returns: A JSON of the resume data for the found resume or an error for resume not found.
-    :rtype: Response
+    Args:
+        resume_id (int): The ID of the resume to fetch.
+
+    Returns:
+        Response: A JSON of the resume data for the found resume or an error for resume not found.
     """
     resume = ResumeData.query.filter_by(user_id=current_user.id, id=resume_id).first()
 
@@ -63,6 +65,15 @@ def load_resume(resume_id):
 @resumes_bp.route("/delete-resume/<int:resume_id>", methods=["DELETE"])
 @login_required
 def delete_resume(resume_id):
+    """
+    Deletes a resume from the database based on the given ID.
+
+    Args:
+        resume_id (int): The ID of the resume to delete.
+
+    Returns:
+        str: Success or error message with corresponding HTTP status code.
+    """
     resume = ResumeData.query.get(resume_id)
     if resume and resume.user_id == current_user.id:
         try:
@@ -87,6 +98,15 @@ def delete_resume(resume_id):
 @resumes_bp.route("/export-resume/<int:resume_id>", methods=["GET"])
 @login_required
 def export_resume(resume_id):
+    """
+    Exports a resume based on the given ID.
+
+    Args:
+        resume_id (int): The ID of the resume to export.
+
+    Returns:
+        Response: Sends the generated resume file or returns an error.
+    """
     resume_data = ResumeData.query.get(resume_id)
 
     if resume_data:
@@ -101,6 +121,12 @@ def export_resume(resume_id):
 @resumes_bp.route("/save-resume", methods=["POST"])
 @login_required
 def save_resume():
+    """
+    Saves a new resume based on the form submission.
+
+    Returns:
+        Response: Redirects to the homepage if the form is successfully processed; otherwise, returns an error message.
+    """
     form = ResumeForm()
     if form.validate_on_submit():
         new_resume = ResumeData(
